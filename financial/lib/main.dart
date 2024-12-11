@@ -1,4 +1,8 @@
-import 'package:financial/widgets/homeInitial.dart';
+import 'package:financial/screens/money.dart';
+import 'package:financial/screens/cards.dart';
+import 'package:financial/screens/homeInitial.dart';
+import 'package:financial/screens/parcelado.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,11 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Financial',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const Homeinitial());
+      title: 'Financial',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      //home: const Homeinitial(),
+      routes: {
+        AppRoutes.HOME: (ctx) => const Homeinitial(),
+        AppRoutes.EMPRESTADO: (ctx) => const Money(),
+        AppRoutes.PARCELADO: (ctx) => const Parcelado(),
+        AppRoutes.CARTOES: (ctx) => const Cards(),
+      },
+    );
   }
 }
