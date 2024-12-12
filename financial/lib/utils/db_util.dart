@@ -15,7 +15,7 @@ class DbUtil {
     await db.execute(_lojas);
     await db.execute(_compras);
     await db.execute(_conta);
-    await db.insert('conta', {'saldo': 0.0});
+    await db.insert('Conta', {'saldo': 0.0});
   }
 
   String get _pessoas => '''
