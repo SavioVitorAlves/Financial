@@ -1,3 +1,4 @@
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/funcionalidades.dart';
 import 'package:flutter/material.dart';
 
@@ -105,17 +106,30 @@ class Homeinitial extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Funcionalidades(
-                            name: 'Emprestado',
-                            url: 'lib/assets/imgs/transacao.png'),
-                        Funcionalidades(
-                            name: 'Parcelado',
-                            url: 'lib/assets/imgs/moeda.png'),
-                        Funcionalidades(
-                            name: 'Cartões', url: 'lib/assets/imgs/cartao.png'),
+                        GestureDetector(
+                          child: const Funcionalidades(
+                              name: 'Emprestado',
+                              url: 'lib/assets/imgs/transacao.png'),
+                          onTap: () => Navigator.of(context)
+                              .pushNamed(AppRoutes.EMPRESTADO),
+                        ),
+                        GestureDetector(
+                          child: const Funcionalidades(
+                              name: 'Parcelado',
+                              url: 'lib/assets/imgs/moeda.png'),
+                          onTap: () => Navigator.of(context)
+                              .pushNamed(AppRoutes.PARCELADO),
+                        ),
+                        GestureDetector(
+                          child: const Funcionalidades(
+                              name: 'Cartões',
+                              url: 'lib/assets/imgs/cartao.png'),
+                          onTap: () => Navigator.of(context)
+                              .pushNamed(AppRoutes.CARTOES),
+                        ),
                       ],
                     ),
                     const SizedBox(
