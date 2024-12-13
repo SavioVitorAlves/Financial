@@ -72,9 +72,9 @@ class DbUtil {
   }
 
   //PEGAR OS DADOS DE UMA PESSOA
-  Future<void> getPessoaComDinheiro(Database db) async {
+  Future<List<Map<String, dynamic>>> getPessoaComDinheiro(Database db) async {
     final List<Map<String, dynamic>> pessoas = await db.query('Pessoas');
-
+    final List<Map<String, dynamic>> peoplesList = [];
     for (var pessoa in pessoas) {
       print('Local: ${pessoa['nome']}');
 
@@ -87,8 +87,20 @@ class DbUtil {
       for (var dinheiro in emprestados) {
         print(
             '  Descrição: ${dinheiro['descricao']}, Valor: ${dinheiro['valor']}, Data: ${dinheiro['data']}');
+        final Map<String, dynamic> map = {
+          'id': pessoa['id'],
+          'name': pessoa['nome'],
+          'emprestado': {
+            'descricao': dinheiro['descricao'],
+            'valor': dinheiro['valor'],
+            'data': dinheiro['data'],
+          }
+        };
+
+        peoplesList.add(map);
       }
     }
+    return peoplesList.toList();
   }
 
   //SUBTRAIR OS DADOS DE DINHEIRO EMPRESTADO DE UMA PESSOA
