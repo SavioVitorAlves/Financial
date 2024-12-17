@@ -1,7 +1,28 @@
+import 'package:financial/services/db_data.dart';
+import 'package:financial/widgets/people_form.dart';
+import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Money extends StatelessWidget {
+class Money extends StatefulWidget {
   const Money({super.key});
+
+  @override
+  State<Money> createState() => _MoneyState();
+}
+
+class _MoneyState extends State<Money> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Provider.of<DbData>(context, listen: false).loadPessoas();
+  }
+
+  _openPeopleFormModal(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (_) => PeopleForm());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,130 +36,100 @@ class Money extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: Center(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                const Row(
+      body: Consumer<DbData>(
+        builder: (context, people, child) {
+          final pessoas = people.pessoas;
+          print('Pessoas: $pessoas');
+          return Center(
+            child: Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(30),
+                child: Column(
                   children: [
-                    Icon(
-                      Icons.monetization_on_outlined,
-                      size: 30,
-                      color: Color.fromARGB(255, 2, 19, 119),
+                    const SizedBox(
+                      height: 10,
                     ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      '8,420.00',
-                      style: TextStyle(
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.monetization_on_outlined,
+                          size: 30,
                           color: Color.fromARGB(255, 2, 19, 119),
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          '8,420.00',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 2, 19, 119),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Spacer(),
+                      ],
                     ),
-                    Spacer(),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Recebidos Recente',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 2, 19, 119),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    Container(
+                      height: 400,
+                      child: pessoas.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'Nenhuma pessoa registrada.',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: pessoas.length,
+                              itemBuilder: (context, index) {
+                                WidgetPessoa(
+                                  pessoa: pessoas[index],
+                                );
+                              }),
+                    ),
+
+                    const Spacer(),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(300, 50),
+                        backgroundColor: const Color.fromARGB(255, 2, 19, 119),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () => _openPeopleFormModal(context),
+                      child: const Text('Adicionar Pessoa',
+                          style: TextStyle(color: Colors.white)),
+                    ), // ,
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Divider(),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Recebidos Recente',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 2, 19, 119),
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 70,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(50, 158, 158, 158),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.blue,
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'N',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Nome da Pessoa',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 2, 19, 119))),
-                          Text('R\$ 25.00',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 2, 19, 119))),
-                        ],
-                      ),
-                      const Spacer(),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.remove_circle,
-                            size: 35,
-                            color: Color.fromARGB(255, 2, 19, 119),
-                          ))
-                    ],
-                  ),
-                ),
-
-                const Spacer(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(300, 50),
-                    backgroundColor: const Color.fromARGB(255, 2, 19, 119),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    // Ação do botão
-                  },
-                  child: const Text('Adicionar Pessoa',
-                      style: TextStyle(color: Colors.white)),
-                ), // ,
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
