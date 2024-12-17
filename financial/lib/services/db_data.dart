@@ -1,7 +1,9 @@
+import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/utils/db_util.dart';
+import 'package:flutter/material.dart';
 
-class DbData {
+class DbData with ChangeNotifier {
   List<Pessoa> _pessoas = [];
 
   List<Pessoa> get pessoas {
@@ -15,16 +17,30 @@ class DbData {
     final db = await dbData.database();
 
     final result = await dbData.getPessoaComDinheiro(db);
+    print('Resultado vindo do banco: $result');
+
     List<Pessoa> listPessoa = [];
-    result.forEach((pessoa) {
-      pessoa.forEach((key, people) {
+    for (var pessoa in result) {
+      print('pessoas: $pessoa');
+
+      List<Emprestado> emprestado = [];
+      if (pessoa['emprestado'] != []) {
+        for (var dinheiro in pessoa['emprestado']) {
+          emprestado.add(Emprestado(
+              id: dinheiro['id'],
+              descricao: dinheiro['descricao'],
+              valor: dinheiro['valor'],
+              date: DateTime.parse(dinheiro['data'])));
+        }
         listPessoa.add(Pessoa(
-            id: int.parse(key),
-            nome: people['name'],
-            dinheiro: people['emprestado']));
-      });
-    });
+            id: pessoa['id'], nome: pessoa['name'], dinheiro: emprestado));
+      } else if (pessoa['emprestado'] == []) {
+        listPessoa
+            .add(Pessoa(id: pessoa['id'], nome: pessoa['name'], dinheiro: []));
+      }
+    }
     _pessoas = listPessoa.toList();
+    notifyListeners();
   }
 
   Future<void> insertPessoa(String nome) async {
@@ -32,6 +48,7 @@ class DbData {
     final db = await dbData.database();
     dbData.insertPessoa(db, nome);
     loadPessoas();
+    notifyListeners();
   }
 
   Future<void> deletePessoa(int id) async {
@@ -39,6 +56,7 @@ class DbData {
     final db = await dbData.database();
     dbData.deletePessoa(db, id);
     loadPessoas();
+    notifyListeners();
   }
 
   Future<void> deleteDinheiro(int id) async {
@@ -46,6 +64,7 @@ class DbData {
     final db = await dbData.database();
     dbData.deletePessoa(db, id);
     loadPessoas();
+    notifyListeners();
   }
 
   Future<void> insertDinheiro(
@@ -62,6 +81,7 @@ class DbData {
 
     dbData.insertDinheiro(db, dinheiro);
     loadPessoas();
+    notifyListeners();
   }
 
   Future<void> updateDinheiro(int id, String descricao, double valor,
@@ -80,5 +100,6 @@ class DbData {
 
     dbData.updateDinheiroEmprestado(db, dinheiroAtualizado);
     loadPessoas();
+    notifyListeners();
   }
 }

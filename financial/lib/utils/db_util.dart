@@ -21,7 +21,7 @@ class DbUtil {
   String get _pessoas => '''
     CREATE TABLE Pessoas (
 	    id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOTNULL,
+      name TEXT NOT NULL
     );
   ''';
   String get _emprestado => '''
@@ -37,7 +37,7 @@ class DbUtil {
   String get _lojas => '''
     CREATE TABLE Lojas (
 	    id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOTNULL,
+      name TEXT NOT NULL
     );
   ''';
   String get _compras => '''
@@ -52,13 +52,13 @@ class DbUtil {
   ''';
   String get _conta => '''
     CREATE TABLE Conta (
-      saldo REAL NOTNULL,
+      saldo REAL NOT NULL
     );
   ''';
 
   //INSERIR PESSOA
   Future<void> insertPessoa(Database db, String nome) async {
-    await db.insert('Peoples', {'nome': nome});
+    await db.insert('Pessoas', {'name': nome});
   }
 
   //INSERIR DINHEIRO EMPRESTADO
@@ -74,32 +74,48 @@ class DbUtil {
   //PEGAR OS DADOS DE UMA PESSOA
   Future<List<Map<String, dynamic>>> getPessoaComDinheiro(Database db) async {
     final List<Map<String, dynamic>> pessoas = await db.query('Pessoas');
+    print('tabela pessoas: $pessoas');
+
     final List<Map<String, dynamic>> peoplesList = [];
     for (var pessoa in pessoas) {
-      print('Local: ${pessoa['nome']}');
+      print('Local: ${pessoa['name']}');
 
       final List<Map<String, dynamic>> emprestados = await db.query(
         'Emprestado',
         where: 'pessoa_id = ?',
         whereArgs: [pessoa['id']],
       );
+      print('tabela pessoas: $emprestados');
+      final List<Map<String, dynamic>> emprestadoList = [];
 
-      for (var dinheiro in emprestados) {
-        print(
-            '  Descrição: ${dinheiro['descricao']}, Valor: ${dinheiro['valor']}, Data: ${dinheiro['data']}');
-        final Map<String, dynamic> map = {
-          'id': pessoa['id'],
-          'name': pessoa['nome'],
-          'emprestado': {
+      if (emprestados.isNotEmpty) {
+        for (var dinheiro in emprestados) {
+          print(
+              '  Descrição: ${dinheiro['descricao']}, Valor: ${dinheiro['valor']}, Data: ${dinheiro['data']}');
+          final Map<String, dynamic> map = {
+            'id': dinheiro['id'],
             'descricao': dinheiro['descricao'],
             'valor': dinheiro['valor'],
             'data': dinheiro['data'],
-          }
+          };
+          emprestadoList.add(map);
+        }
+        final Map<String, dynamic> map = {
+          'id': pessoa['id'],
+          'name': pessoa['name'],
+          'emprestado': emprestadoList
         };
-
+        peoplesList.add(map);
+      } else {
+        final Map<String, dynamic> map = {
+          'id': pessoa['id'],
+          'name': pessoa['name'],
+          'emprestado': []
+        };
         peoplesList.add(map);
       }
     }
+    print('Resultado final: $peoplesList');
     return peoplesList.toList();
   }
 
