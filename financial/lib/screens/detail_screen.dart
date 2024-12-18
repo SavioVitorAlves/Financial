@@ -1,16 +1,35 @@
+import 'package:financial/models/pessoa.dart';
+import 'package:financial/widgets/emprestado_form.dart';
+import 'package:financial/widgets/widget_emprestado.dart';
+import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  _openEmprestadoFormModal(BuildContext context, int id) {
+    showModalBottomSheet(
+        context: context,
+        builder: (_) => EmprestadoForm(
+              id: id,
+            ));
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Pessoa pessoa = ModalRoute.of(context)!.settings.arguments as Pessoa;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Compras Parceladas',
-          style:
-              TextStyle(color: Color.fromARGB(255, 2, 19, 119), fontSize: 18),
+        title: Text(
+          pessoa.nome, // nome da pessoa vindo do bando de dados no appBar
+          style: const TextStyle(
+              color: Color.fromARGB(255, 2, 19, 119), fontSize: 18),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -55,71 +74,22 @@ class DetailScreen extends StatelessWidget {
                   height: 15,
                 ),
                 Container(
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Compras Recente',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 2, 19, 119),
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 70,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(50, 158, 158, 158),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.blue,
-                        ),
-                        child: const Center(
+                  height: 400,
+                  child: pessoa.dinheiro.isEmpty
+                      ? const Center(
                           child: Text(
-                            'N',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold),
+                            'Nenhum dinheiro foi registrado.',
+                            style: TextStyle(color: Colors.grey),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Nome da Loja',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 2, 19, 119))),
-                          Text('R\$ 25.00',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 2, 19, 119))),
-                        ],
-                      ),
-                      const Spacer(),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.remove_circle,
-                            size: 35,
-                            color: Color.fromARGB(255, 2, 19, 119),
-                          ))
-                    ],
-                  ),
+                        )
+                      : ListView.builder(
+                          itemCount: pessoa.dinheiro.length,
+                          itemBuilder: (context, index) {
+                            return WidgetEmprestado(
+                              emprestado: pessoa.dinheiro[index],
+                            );
+                          }),
                 ),
-
                 const Spacer(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -129,10 +99,8 @@ class DetailScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {
-                    // Ação do botão
-                  },
-                  child: const Text('Adicionar Loja',
+                  onPressed: () => _openEmprestadoFormModal(context, pessoa.id),
+                  child: const Text('Adicionar Dinheiro',
                       style: TextStyle(color: Colors.white)),
                 ), // ,
               ],
