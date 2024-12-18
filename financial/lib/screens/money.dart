@@ -1,4 +1,5 @@
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/people_form.dart';
 import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
@@ -105,8 +106,15 @@ class _MoneyState extends State<Money> {
                           : ListView.builder(
                               itemCount: pessoas.length,
                               itemBuilder: (context, index) {
-                                WidgetPessoa(
-                                  pessoa: pessoas[index],
+                                return GestureDetector(
+                                  child: WidgetPessoa(
+                                    pessoa: pessoas[index],
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        AppRoutes.DETAIL_SCREEN,
+                                        arguments: pessoas[index]);
+                                  },
                                 );
                               }),
                     ),
