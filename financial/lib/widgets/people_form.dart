@@ -36,6 +36,8 @@ class _PeopleFormState extends State<PeopleForm> {
     try {
       await Provider.of<DbData>(context, listen: false).insertPessoa(nome);
       Provider.of<DbData>(context, listen: false).loadPessoas();
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pessoa adicionada com sucesso!')));
       Navigator.of(context).pop();
     } catch (error) {
       await showDialog(
