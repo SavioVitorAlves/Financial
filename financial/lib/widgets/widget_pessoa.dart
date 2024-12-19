@@ -1,7 +1,9 @@
 import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/pessoa.dart';
+import 'package:financial/services/db_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WidgetPessoa extends StatelessWidget {
   final Pessoa pessoa;
@@ -18,10 +20,52 @@ class WidgetPessoa extends StatelessWidget {
       return valorTotal;
     }
 
+    Future<void> _submitForm(BuildContext context) async {
+      try {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Aviso!'),
+            content: const Text('Você deseja deletar essa pessoa?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Provider.of<DbData>(context, listen: false)
+                        .deletePessoa(pessoa.id);
+                    Provider.of<DbData>(context, listen: false).loadPessoas();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Pessoa removida com sucesso!')));
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Sim')),
+              TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('Não'))
+            ],
+          ),
+        );
+        return;
+      } catch (error) {
+        await showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: const Text('Ocorreu um erro!'),
+                  content: Text(
+                      'Ocorreu um erro ao deletar uma pessoa! Error: $error'),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        child: const Text('OK'))
+                  ],
+                ));
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.all(10),
       height: 70,
       width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(
         color: const Color.fromARGB(50, 158, 158, 158),
         borderRadius: BorderRadius.circular(10),
@@ -61,7 +105,7 @@ class WidgetPessoa extends StatelessWidget {
           ),
           const Spacer(),
           IconButton(
-              onPressed: () {},
+              onPressed: () => _submitForm(context),
               icon: const Icon(
                 Icons.remove_circle,
                 size: 35,
