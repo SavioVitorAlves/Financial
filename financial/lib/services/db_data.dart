@@ -84,21 +84,11 @@ class DbData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateDinheiro(int id, String descricao, double valor,
-      DateTime date, double diminuir) async {
+  Future<void> updateDinheiro(int id, double valor) async {
     final dbData = DbUtil();
     final db = await dbData.database();
 
-    final resultado = valor - diminuir;
-
-    final Map<String, dynamic> dinheiroAtualizado = {
-      'pessoa_id': id,
-      'descricao': descricao,
-      'valor': resultado,
-      'data': date.toIso8601String(),
-    };
-
-    dbData.updateDinheiroEmprestado(db, dinheiroAtualizado);
+    dbData.updateDinheiroEmprestado(db, id, valor);
     loadPessoas();
     notifyListeners();
   }
