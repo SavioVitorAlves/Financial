@@ -121,16 +121,14 @@ class DbUtil {
 
   //SUBTRAIR OS DADOS DE DINHEIRO EMPRESTADO DE UMA PESSOA
   Future<void> updateDinheiroEmprestado(
-      Database db, Map<String, dynamic> data) async {
+      Database db, int pessoaId, double novoValor) async {
     await db.update(
       'Emprestado',
       {
-        'descricao': data['descricao'],
-        'valor': data['valor'],
-        'data': data['data'],
+        'valor': novoValor,
       },
       where: 'id = ?',
-      whereArgs: [data['pessoa_id']],
+      whereArgs: [pessoaId],
     );
   }
 
