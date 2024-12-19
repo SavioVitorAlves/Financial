@@ -83,7 +83,7 @@ class _MoneyState extends State<Money> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: const Text(
-                        'Recebidos Recente',
+                        'Recebidos Recentes',
                         style: TextStyle(
                             color: Color.fromARGB(255, 2, 19, 119),
                             fontSize: 15,
