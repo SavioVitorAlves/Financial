@@ -10,7 +10,7 @@ class DbData with ChangeNotifier {
     return [..._pessoas];
   }
 
-  DbData([this._pessoas = const []]);
+  DbData([this._pessoas = const [], this._lojas = const []]);
 
   Future<void> loadPessoas() async {
     final dbData = DbUtil();
@@ -48,6 +48,7 @@ class DbData with ChangeNotifier {
     final db = await dbData.database();
     dbData.insertPessoa(db, nome);
     loadPessoas();
+
     notifyListeners();
   }
 
@@ -62,7 +63,7 @@ class DbData with ChangeNotifier {
   Future<void> deleteDinheiro(int id) async {
     final dbData = DbUtil();
     final db = await dbData.database();
-    dbData.deletePessoa(db, id);
+    dbData.deleteDinheiroEmprestado(db, id);
     loadPessoas();
     notifyListeners();
   }
@@ -81,6 +82,13 @@ class DbData with ChangeNotifier {
 
     dbData.insertDinheiro(db, dinheiro);
     loadPessoas();
+    /*final pessoas = _pessoas;
+    for (var pessoa in pessoas) {
+      if (pessoa.id == id) {
+        pessoa.dinheiro.add(
+            Emprestado(id: id, descricao: descricao, valor: valor, date: date));
+      }
+    }*/
     notifyListeners();
   }
 
@@ -90,6 +98,102 @@ class DbData with ChangeNotifier {
 
     dbData.updateDinheiroEmprestado(db, id, valor);
     loadPessoas();
+    notifyListeners();
+  }
+
+  //================
+  List<Pessoa> _lojas = [];
+
+  List<Pessoa> get lojas {
+    return [..._pessoas];
+  }
+
+  Future<void> loadLojas() async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+
+    final result = await dbData.getLojaComGastos(db);
+    print('Resultado vindo do banco: $result');
+
+    List<Pessoa> listPessoa = [];
+    for (var pessoa in result) {
+      print('pessoas: $pessoa');
+
+      List<Emprestado> emprestado = [];
+      if (pessoa['emprestado'] != []) {
+        for (var dinheiro in pessoa['emprestado']) {
+          emprestado.add(Emprestado(
+              id: dinheiro['id'],
+              descricao: dinheiro['descricao'],
+              valor: dinheiro['valor'],
+              date: DateTime.parse(dinheiro['data'])));
+        }
+        listPessoa.add(Pessoa(
+            id: pessoa['id'], nome: pessoa['name'], dinheiro: emprestado));
+      } else if (pessoa['emprestado'] == []) {
+        listPessoa
+            .add(Pessoa(id: pessoa['id'], nome: pessoa['name'], dinheiro: []));
+      }
+    }
+    _pessoas = listPessoa.toList();
+    notifyListeners();
+  }
+
+  Future<void> insertLoja(String nome) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+    dbData.insertLoja(db, nome);
+    loadLojas();
+
+    notifyListeners();
+  }
+
+  Future<void> deleteLoja(int id) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+    dbData.deleteLoja(db, id);
+    loadLojas();
+    notifyListeners();
+  }
+
+  Future<void> deleteGasto(int id) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+    dbData.deleteGastosDeLoja(db, id);
+    loadLojas();
+    notifyListeners();
+  }
+
+  Future<void> insertGasto(
+      int id, String descricao, double valor, DateTime date) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+
+    final Map<String, dynamic> dinheiro = {
+      'id': id,
+      'descricao': descricao,
+      'valor': valor,
+      'data': date.toIso8601String(),
+    };
+
+    dbData.insertGastos(db, dinheiro);
+    loadLojas();
+    /*final pessoas = _pessoas;
+    for (var pessoa in pessoas) {
+      if (pessoa.id == id) {
+        pessoa.dinheiro.add(
+            Emprestado(id: id, descricao: descricao, valor: valor, date: date));
+      }
+    }*/
+    notifyListeners();
+  }
+
+  Future<void> updateGasto(int id, double valor) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+
+    dbData.updateGastosDeLoja(db, id, valor);
+    loadLojas();
     notifyListeners();
   }
 }
