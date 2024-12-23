@@ -34,8 +34,8 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
       return;
     }
     final double novoValor;
-    if (double.parse(_valorControler.text) >= widget.valorAtual) {
-      novoValor = double.parse(_valorControler.text) - widget.valorAtual;
+    if (double.parse(_valorControler.text) <= widget.valorAtual) {
+      novoValor = widget.valorAtual - double.parse(_valorControler.text);
     } else {
       showDialog(
         context: context,
