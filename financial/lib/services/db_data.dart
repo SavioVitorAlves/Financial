@@ -1,4 +1,6 @@
 import 'package:financial/models/emprestado.dart';
+import 'package:financial/models/gasto.dart';
+import 'package:financial/models/loja.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/utils/db_util.dart';
 import 'package:flutter/material.dart';
@@ -102,10 +104,10 @@ class DbData with ChangeNotifier {
   }
 
   //================
-  List<Pessoa> _lojas = [];
+  List<Loja> _lojas = [];
 
-  List<Pessoa> get lojas {
-    return [..._pessoas];
+  List<Loja> get lojas {
+    return [..._lojas];
   }
 
   Future<void> loadLojas() async {
@@ -115,27 +117,26 @@ class DbData with ChangeNotifier {
     final result = await dbData.getLojaComGastos(db);
     print('Resultado vindo do banco: $result');
 
-    List<Pessoa> listPessoa = [];
-    for (var pessoa in result) {
-      print('pessoas: $pessoa');
+    List<Loja> listLojas = [];
+    for (var loja in result) {
+      print('loja: $loja');
 
-      List<Emprestado> emprestado = [];
-      if (pessoa['emprestado'] != []) {
-        for (var dinheiro in pessoa['emprestado']) {
-          emprestado.add(Emprestado(
-              id: dinheiro['id'],
-              descricao: dinheiro['descricao'],
-              valor: dinheiro['valor'],
-              date: DateTime.parse(dinheiro['data'])));
+      List<Gasto> compras = [];
+      if (loja['compra'] != []) {
+        for (var compra in loja['compra']) {
+          compras.add(Gasto(
+              id: compra['id'],
+              descricao: compra['descricao'],
+              valor: compra['valor'],
+              date: DateTime.parse(compra['data'])));
         }
-        listPessoa.add(Pessoa(
-            id: pessoa['id'], nome: pessoa['name'], dinheiro: emprestado));
-      } else if (pessoa['emprestado'] == []) {
-        listPessoa
-            .add(Pessoa(id: pessoa['id'], nome: pessoa['name'], dinheiro: []));
+        listLojas
+            .add(Loja(id: loja['id'], nome: loja['name'], compra: compras));
+      } else if (loja['compra'] == []) {
+        listLojas.add(Loja(id: loja['id'], nome: loja['name'], compra: []));
       }
     }
-    _pessoas = listPessoa.toList();
+    _lojas = listLojas.toList();
     notifyListeners();
   }
 

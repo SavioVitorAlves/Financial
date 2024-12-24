@@ -171,7 +171,7 @@ class DbUtil {
 
   //INSERIR GASTOS
   Future<void> insertGastos(Database db, Map<String, dynamic> data) async {
-    await db.insert('Gastos', {
+    await db.insert('Compras', {
       'pessoa_id': data['id'],
       'descricao': data['descricao'],
       'valor': data['valor'],
@@ -189,7 +189,7 @@ class DbUtil {
       print('Local: ${loja['nome']}');
 
       final List<Map<String, dynamic>> gastos = await db.query(
-        'Gastos',
+        'Compras',
         where: 'loja_id = ?',
         whereArgs: [loja['id']],
       );
@@ -231,7 +231,7 @@ class DbUtil {
   Future<void> updateGastosDeLoja(
       Database db, int lojaId, double novoValor) async {
     await db.update(
-      'Gastos',
+      'Compras',
       {
         'valor': novoValor,
       },
@@ -242,7 +242,7 @@ class DbUtil {
 
   //DELETA UM GASTO
   Future<void> deleteGastosDeLoja(Database db, int id) async {
-    await db.delete('Gastos', where: 'id = ?', whereArgs: [id]);
+    await db.delete('Compras', where: 'id = ?', whereArgs: [id]);
   }
 
   //DELETA LOJA
