@@ -112,7 +112,7 @@ class _MoneyState extends State<Money> {
                                   ),
                                   onTap: () {
                                     Navigator.of(context).pushNamed(
-                                        AppRoutes.DETAIL_SCREEN,
+                                        AppRoutes.DETAIL_PESSOA_SCREEN,
                                         arguments: pessoas[index]);
                                   },
                                 );

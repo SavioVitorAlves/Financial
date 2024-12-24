@@ -1,5 +1,7 @@
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/people_form.dart';
+import 'package:financial/widgets/widget_loja.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,6 +40,7 @@ class _ParceladoState extends State<Parcelado> {
       body: Consumer<DbData>(
         builder: (context, compras, child) {
           final lojas = compras.lojas;
+          print('Lojas: $lojas');
           return Center(
             child: Container(
               height: double.infinity,
@@ -91,56 +94,28 @@ class _ParceladoState extends State<Parcelado> {
                       height: 20,
                     ),
                     Container(
-                      padding: const EdgeInsets.all(10),
-                      height: 70,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(50, 158, 158, 158),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.blue,
-                            ),
-                            child: const Center(
+                      height: 400,
+                      child: lojas.isEmpty
+                          ? const Center(
                               child: Text(
-                                'N',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.bold),
+                                'Nenhuma loja registrada.',
+                                style: TextStyle(color: Colors.grey),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Nome da Loja',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 2, 19, 119))),
-                              Text('R\$ 25.00',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 2, 19, 119))),
-                            ],
-                          ),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.remove_circle,
-                                size: 35,
-                                color: Color.fromARGB(255, 2, 19, 119),
-                              ))
-                        ],
-                      ),
+                            )
+                          : ListView.builder(
+                              itemCount: lojas.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  child: WidgetLoja(
+                                    loja: lojas[index],
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        AppRoutes.DETAIL_LOJA_SCREEN,
+                                        arguments: lojas[index]);
+                                  },
+                                );
+                              }),
                     ),
 
                     const Spacer(),
