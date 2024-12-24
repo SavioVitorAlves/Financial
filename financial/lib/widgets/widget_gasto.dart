@@ -2,6 +2,7 @@ import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/gasto.dart';
 import 'package:financial/services/db_data.dart';
 import 'package:financial/widgets/emprestado_form.dart';
+import 'package:financial/widgets/update_compra_form.dart';
 import 'package:financial/widgets/update_emprestado_form.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -27,7 +28,7 @@ class WidgetGasto extends StatelessWidget {
     _openUpdateEmprestadoFormModal(BuildContext context, int id, double valor) {
       showModalBottomSheet(
           context: context,
-          builder: (_) => UpdateEmprestadoForm(id: id, valorAtual: valor));
+          builder: (_) => UpdateCompraForm(id: id, valorAtual: valor));
     }
 
     return Dismissible(
@@ -51,7 +52,7 @@ class WidgetGasto extends StatelessWidget {
             context: context,
             builder: (ctx) => AlertDialog(
                   title: const Text('Tem Certeza?'),
-                  content: const Text('Quer deletar esse dinheiro emprestado?'),
+                  content: const Text('Quer deletar essa compra?'),
                   actions: [
                     TextButton(
                         onPressed: () {
@@ -69,9 +70,9 @@ class WidgetGasto extends StatelessWidget {
       onDismissed: (_) async {
         try {
           await Provider.of<DbData>(context, listen: false)
-              .deleteDinheiro(gasto.id);
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Dinheiro emprestado removido com sucesso')));
+              .deleteGasto(gasto.id);
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Compra removida com sucesso')));
         } catch (error) {
           // Reverter o estado se falhar
           ScaffoldMessenger.of(context).showSnackBar(

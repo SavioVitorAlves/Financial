@@ -34,9 +34,9 @@ class WidgetLoja extends StatelessWidget {
                   onPressed: () {
                     Provider.of<DbData>(context, listen: false)
                         .deleteLoja(loja.id);
-                    Provider.of<DbData>(context, listen: false).loadPessoas();
+                    Provider.of<DbData>(context, listen: false).loadLojas();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Pessoa removida com sucesso!')));
+                        content: Text('Loja removida com sucesso!')));
                     Navigator.of(context).pop();
                   },
                   child: const Text('Sim')),

@@ -166,13 +166,13 @@ class DbUtil {
 
   //INSERIR LOJA
   Future<void> insertLoja(Database db, String nome) async {
-    await db.insert('Lojas', {'nome': nome});
+    await db.insert('Lojas', {'name': nome});
   }
 
   //INSERIR GASTOS
   Future<void> insertGastos(Database db, Map<String, dynamic> data) async {
     await db.insert('Compras', {
-      'pessoa_id': data['id'],
+      'loja_id': data['id'],
       'descricao': data['descricao'],
       'valor': data['valor'],
       'data': data['data'],
@@ -182,11 +182,11 @@ class DbUtil {
   //PEGAR A LOJA E SUA LISTA DE GASTOS
   Future<List<Map<String, dynamic>>> getLojaComGastos(Database db) async {
     final List<Map<String, dynamic>> lojas = await db.query('Lojas');
-    print('tabela pessoas: $lojas');
+    print('tabela lojas: $lojas');
 
     final List<Map<String, dynamic>> storeList = [];
     for (var loja in lojas) {
-      print('Local: ${loja['nome']}');
+      print('Local: ${loja['name']}');
 
       final List<Map<String, dynamic>> gastos = await db.query(
         'Compras',
@@ -211,19 +211,19 @@ class DbUtil {
         final Map<String, dynamic> map = {
           'id': loja['id'],
           'name': loja['name'],
-          'emprestado': gastoList
+          'compra': gastoList
         };
         storeList.add(map);
       } else {
         final Map<String, dynamic> map = {
           'id': loja['id'],
           'name': loja['name'],
-          'emprestado': []
+          'compra': []
         };
         storeList.add(map);
       }
     }
-    print('Resultado final: $storeList');
+    print('Resultado final lojas: $storeList');
     return storeList.toList();
   }
 

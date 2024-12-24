@@ -81,7 +81,7 @@ class _DetailLojaScreenState extends State<DetailLojaScreen> {
                   child: loja.compra.isEmpty
                       ? const Center(
                           child: Text(
-                            'Nenhum dinheiro foi registrado.',
+                            'Nenhuma compra foi registrada.',
                             style: TextStyle(color: Colors.grey),
                           ),
                         )

@@ -170,14 +170,14 @@ class DbData with ChangeNotifier {
     final dbData = DbUtil();
     final db = await dbData.database();
 
-    final Map<String, dynamic> dinheiro = {
+    final Map<String, dynamic> gasto = {
       'id': id,
       'descricao': descricao,
       'valor': valor,
       'data': date.toIso8601String(),
     };
 
-    dbData.insertGastos(db, dinheiro);
+    dbData.insertGastos(db, gasto);
     loadLojas();
     /*final pessoas = _pessoas;
     for (var pessoa in pessoas) {

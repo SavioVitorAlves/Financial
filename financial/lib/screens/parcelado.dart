@@ -19,7 +19,7 @@ class _ParceladoState extends State<Parcelado> {
     // TODO: implement initState
     super.initState();
 
-    Provider.of<DbData>(context, listen: false).loadPessoas();
+    Provider.of<DbData>(context, listen: false).loadLojas();
   }
 
   _openStoreFormModal(BuildContext context) {
