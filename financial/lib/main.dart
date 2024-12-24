@@ -1,4 +1,5 @@
-import 'package:financial/screens/detail_screen.dart';
+import 'package:financial/screens/detail_loja_screen.dart';
+import 'package:financial/screens/detail_pessoa_screen.dart';
 import 'package:financial/screens/money.dart';
 import 'package:financial/screens/cards.dart';
 import 'package:financial/screens/homeInitial.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
           AppRoutes.EMPRESTADO: (ctx) => const Money(),
           AppRoutes.PARCELADO: (ctx) => const Parcelado(),
           AppRoutes.CARTOES: (ctx) => const Cards(),
-          AppRoutes.DETAIL_SCREEN: (ctx) => const DetailScreen(),
+          AppRoutes.DETAIL_PESSOA_SCREEN: (ctx) => const DetailPessoaScreen(),
+          AppRoutes.DETAIL_LOJA_SCREEN: (ctx) => const DetailLojaScreen(),
         },
       ),
     );
