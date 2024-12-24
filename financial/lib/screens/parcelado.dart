@@ -1,6 +1,7 @@
 import 'package:financial/services/db_data.dart';
 import 'package:financial/utils/app_routes.dart';
-import 'package:financial/widgets/people_form.dart';
+import 'package:financial/widgets/loja_form.dart';
+
 import 'package:financial/widgets/widget_loja.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +22,8 @@ class _ParceladoState extends State<Parcelado> {
     Provider.of<DbData>(context, listen: false).loadPessoas();
   }
 
-  _openPeopleFormModal(BuildContext context) {
-    showModalBottomSheet(context: context, builder: (_) => PeopleForm());
+  _openStoreFormModal(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (_) => const LojaForm());
   }
 
   @override
@@ -127,9 +128,9 @@ class _ParceladoState extends State<Parcelado> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {
-                        // Ação do botão
-                      },
+                      onPressed: () => _openStoreFormModal(
+                        context,
+                      ),
                       child: const Text('Adicionar Loja',
                           style: TextStyle(color: Colors.white)),
                     ), // ,

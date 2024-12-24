@@ -1,6 +1,7 @@
 import 'package:financial/models/loja.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/widgets/emprestado_form.dart';
+import 'package:financial/widgets/gasto_form.dart';
 import 'package:financial/widgets/widget_emprestado.dart';
 import 'package:financial/widgets/widget_gasto.dart';
 import 'package:financial/widgets/widget_pessoa.dart';
@@ -14,10 +15,10 @@ class DetailLojaScreen extends StatefulWidget {
 }
 
 class _DetailLojaScreenState extends State<DetailLojaScreen> {
-  _openEmprestadoFormModal(BuildContext context, int id) {
+  _openGastosFormModal(BuildContext context, int id) {
     showModalBottomSheet(
         context: context,
-        builder: (_) => EmprestadoForm(
+        builder: (_) => GastoForm(
               id: id,
             ));
   }
@@ -101,8 +102,8 @@ class _DetailLojaScreenState extends State<DetailLojaScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () => _openEmprestadoFormModal(context, loja.id),
-                  child: const Text('Adicionar Dinheiro',
+                  onPressed: () => _openGastosFormModal(context, loja.id),
+                  child: const Text('Adicionar Compra',
                       style: TextStyle(color: Colors.white)),
                 ), // ,
               ],
