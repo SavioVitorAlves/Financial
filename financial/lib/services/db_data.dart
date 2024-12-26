@@ -251,7 +251,7 @@ class DbData with ChangeNotifier {
     final db = await dbData.database();
     final Map<String, dynamic> cartao = {
       'name': nome,
-      'name_pessoa': nome,
+      'name_pessoa': nome_pessoa,
       'cor': cor,
     };
     dbData.insertCartao(db, cartao);
@@ -288,7 +288,7 @@ class DbData with ChangeNotifier {
       'data': date.toIso8601String(),
     };
 
-    dbData.insertGastos(db, credito);
+    dbData.insertCredito(db, credito);
     loadCartoes();
     /*final pessoas = _pessoas;
     for (var pessoa in pessoas) {

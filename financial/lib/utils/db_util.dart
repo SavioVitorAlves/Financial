@@ -286,7 +286,7 @@ class DbUtil {
           'name': cartao['name'],
           'name_pessoa': cartao['name_pessoa'],
           'cor': cartao['cor'],
-          'emprestado': comprasList
+          'credito': comprasList
         };
         cartoesList.add(map);
       } else {
@@ -295,7 +295,7 @@ class DbUtil {
           'name': cartao['name'],
           'name_pessoa': cartao['name_pessoa'],
           'cor': cartao['cor'],
-          'emprestado': []
+          'credito': []
         };
         cartoesList.add(map);
       }
