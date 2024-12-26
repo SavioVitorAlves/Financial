@@ -12,12 +12,8 @@ class WidgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _openUpdateEmprestadoFormModal(BuildContext context, int id, double valor) {
-      showModalBottomSheet(
-          context: context,
-          builder: (_) => UpdateEmprestadoForm(id: id, valorAtual: valor));
-    }
-
+    int cor = int.parse("0xff${card.cor}");
+    int cor99 = int.parse("0x99${card.cor}");
     return Dismissible(
       key: ValueKey(card.id),
       direction: DismissDirection.endToStart,
@@ -39,7 +35,7 @@ class WidgetCard extends StatelessWidget {
             context: context,
             builder: (ctx) => AlertDialog(
                   title: const Text('Tem Certeza?'),
-                  content: const Text('Quer deletar esse dinheiro emprestado?'),
+                  content: const Text('Quer deletar esse cartão?'),
                   actions: [
                     TextButton(
                         onPressed: () {
@@ -57,7 +53,7 @@ class WidgetCard extends StatelessWidget {
       onDismissed: (_) async {
         try {
           await Provider.of<DbData>(context, listen: false)
-              .deleteDinheiro(card.id);
+              .deleteCartao(card.id);
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Cartão removido com sucesso')));
         } catch (error) {
@@ -76,9 +72,9 @@ class WidgetCard extends StatelessWidget {
         width: double.infinity,
         margin: const EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
-          gradient: const RadialGradient(colors: [
-            Color.fromARGB(50, 158, 158, 158),
-            Color.fromARGB(255, 158, 158, 158),
+          gradient: RadialGradient(colors: [
+            Color(cor99),
+            Color(cor),
           ]),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -86,11 +82,25 @@ class WidgetCard extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Nome do Banco'),
+              Text(
+                card.name,
+                style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
               Transform.rotate(
-                  angle: pi / 2, child: const Icon(Icons.wifi_rounded)),
-              const Text('Nome da Pessoa'),
+                  angle: pi / 2,
+                  child: const Icon(
+                    Icons.wifi_rounded,
+                    color: Colors.white,
+                  )),
+              Text(
+                card.name_pessoa,
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
             ],
           ),
         ),
