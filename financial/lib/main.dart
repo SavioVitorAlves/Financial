@@ -1,3 +1,4 @@
+import 'package:financial/screens/detail_cartao_screen.dart';
 import 'package:financial/screens/detail_loja_screen.dart';
 import 'package:financial/screens/detail_pessoa_screen.dart';
 import 'package:financial/screens/money.dart';
@@ -35,8 +36,13 @@ class MyApp extends StatelessWidget {
           AppRoutes.CARTOES: (ctx) => const Cards(),
           AppRoutes.DETAIL_PESSOA_SCREEN: (ctx) => const DetailPessoaScreen(),
           AppRoutes.DETAIL_LOJA_SCREEN: (ctx) => const DetailLojaScreen(),
+          AppRoutes.DETAIL_CARTAO_SCREEN: (ctx) => const DetailCartaoScreen(),
         },
       ),
     );
   }
+}
+
+class DetailCreditoScreen {
+  const DetailCreditoScreen();
 }

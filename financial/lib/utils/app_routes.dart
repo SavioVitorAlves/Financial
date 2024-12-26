@@ -5,4 +5,5 @@ class AppRoutes {
   static const CARTOES = '/cartoes';
   static const DETAIL_PESSOA_SCREEN = '/detail_pessoa';
   static const DETAIL_LOJA_SCREEN = '/detail_loja';
+  static const DETAIL_CARTAO_SCREEN = '/detail_cartao';
 }
