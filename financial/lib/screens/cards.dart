@@ -1,6 +1,8 @@
 import 'package:financial/services/db_data.dart';
 import 'package:financial/utils/app_routes.dart';
+import 'package:financial/widgets/cartao_form.dart';
 import 'package:financial/widgets/people_form.dart';
+import 'package:financial/widgets/widget_card.dart';
 import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +20,11 @@ class _CardsState extends State<Cards> {
     // TODO: implement initState
     super.initState();
 
-    Provider.of<DbData>(context, listen: false).loadPessoas();
+    Provider.of<DbData>(context, listen: false).loadCartoes();
   }
 
-  _openPeopleFormModal(BuildContext context) {
-    showModalBottomSheet(context: context, builder: (_) => const PeopleForm());
+  _openCartaoFormModal(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (_) => const CartaoForm());
   }
 
   @override
@@ -38,9 +40,9 @@ class _CardsState extends State<Cards> {
         backgroundColor: Colors.white,
       ),
       body: Consumer<DbData>(
-        builder: (context, people, child) {
-          final pessoas = people.pessoas;
-          print('Pessoas: $pessoas');
+        builder: (context, cartao, child) {
+          final cartoes = cartao.cartoes;
+          print('Cartoes: $cartoes');
           return Center(
             child: Container(
               height: double.infinity,
@@ -96,7 +98,7 @@ class _CardsState extends State<Cards> {
 
                     Container(
                       height: 400,
-                      child: pessoas.isEmpty
+                      child: cartoes.isEmpty
                           ? const Center(
                               child: Text(
                                 'Nenhum cartão registrado.',
@@ -104,16 +106,16 @@ class _CardsState extends State<Cards> {
                               ),
                             )
                           : ListView.builder(
-                              itemCount: pessoas.length,
+                              itemCount: cartoes.length,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
-                                  child: WidgetPessoa(
-                                    pessoa: pessoas[index],
+                                  child: WidgetCard(
+                                    card: cartoes[index],
                                   ),
                                   onTap: () {
                                     Navigator.of(context).pushNamed(
-                                        AppRoutes.DETAIL_PESSOA_SCREEN,
-                                        arguments: pessoas[index]);
+                                        AppRoutes.DETAIL_CARTAO_SCREEN,
+                                        arguments: cartoes[index]);
                                   },
                                 );
                               }),
@@ -128,7 +130,7 @@ class _CardsState extends State<Cards> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () => _openPeopleFormModal(context),
+                      onPressed: () => _openCartaoFormModal(context),
                       child: const Text('Adicionar Cartão',
                           style: TextStyle(color: Colors.white)),
                     ), // ,
