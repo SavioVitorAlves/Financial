@@ -251,6 +251,7 @@ class DbUtil {
   }
 
 //================================
+
   //PEGAR OS DADOS DE UM CARTÃO
   Future<List<Map<String, dynamic>>> getCartaoComCreditos(Database db) async {
     final List<Map<String, dynamic>> cartoes = await db.query('Cartoes');
@@ -266,7 +267,7 @@ class DbUtil {
         whereArgs: [cartao['id']],
       );
       print('tabela creditos: $creditos');
-      final List<Map<String, dynamic>> emprestadoList = [];
+      final List<Map<String, dynamic>> comprasList = [];
 
       if (creditos.isNotEmpty) {
         for (var credito in creditos) {
@@ -278,14 +279,14 @@ class DbUtil {
             'valor': credito['valor'],
             'data': credito['data'],
           };
-          emprestadoList.add(map);
+          comprasList.add(map);
         }
         final Map<String, dynamic> map = {
           'id': cartao['id'],
           'name': cartao['name'],
           'name_pessoa': cartao['name_pessoa'],
           'cor': cartao['cor'],
-          'emprestado': emprestadoList
+          'emprestado': comprasList
         };
         cartoesList.add(map);
       } else {
@@ -320,5 +321,28 @@ class DbUtil {
       'valor': data['valor'],
       'data': data['data'],
     });
+  }
+
+  //SUBTRAIR VALOR DE UMA CREDITO
+  Future<void> updateCreditoDeCartao(
+      Database db, int lojaId, double novoValor) async {
+    await db.update(
+      'Creditos',
+      {
+        'valor': novoValor,
+      },
+      where: 'id = ?',
+      whereArgs: [lojaId],
+    );
+  }
+
+  //DELETA UM GASTO
+  Future<void> deleteCreditoDeCartao(Database db, int id) async {
+    await db.delete('Creditos', where: 'id = ?', whereArgs: [id]);
+  }
+
+  //DELETA LOJA
+  Future<void> deleteCartao(Database db, int id) async {
+    await db.delete('Cartoes', where: 'id = ?', whereArgs: [id]);
   }
 }
