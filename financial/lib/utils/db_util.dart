@@ -345,4 +345,20 @@ class DbUtil {
   Future<void> deleteCartao(Database db, int id) async {
     await db.delete('Cartoes', where: 'id = ?', whereArgs: [id]);
   }
+
+  //==================
+  //PEGAR OS DADOS DE UM CARTÃO
+  Future<List<Map<String, dynamic>>> getContaComSaldo(Database db) async {
+    final List<Map<String, dynamic>> conta = await db.query('Conta');
+    print('tabela conta: $conta');
+
+    return conta.toList();
+  }
+
+  //INSERIR CARTAO
+  Future<void> UpdateSaldo(Database db, double valor) async {
+    await db.update('Conta', {
+      'valor': valor,
+    });
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:financial/models/conta.dart';
 import 'package:financial/models/credito.dart';
 import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/gasto.dart';
@@ -306,6 +307,39 @@ class DbData with ChangeNotifier {
 
     dbData.updateCreditoDeCartao(db, id, valor);
     loadCartoes();
+    notifyListeners();
+  }
+
+  //===============
+  Map<String, dynamic> _conta = {};
+
+  Map<String, dynamic> get conta {
+    return {..._conta};
+  }
+
+  Future<void> loadConta() async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+
+    final result = await dbData.getContaComSaldo(db);
+    print('Resultado vindo do banco: $result');
+
+    Map<String, dynamic> listContas = {};
+    for (var conta in result) {
+      print('Conta: $conta');
+      listContas = conta;
+    }
+    _conta = listContas;
+    notifyListeners();
+  }
+
+  Future<void> UpdateSaldo(double valor) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+
+    dbData.UpdateSaldo(db, valor);
+    loadConta();
+
     notifyListeners();
   }
 }
