@@ -56,6 +56,8 @@ class _EmprestadoFormState extends State<EmprestadoForm> {
 
     try {
       await Provider.of<DbData>(context, listen: false)
+          .insertExtrato(descricao, valor, DateTime.now());
+      await Provider.of<DbData>(context, listen: false)
           .insertDinheiro(id, descricao, valor, _selectedDate);
       Provider.of<DbData>(context, listen: false).loadPessoas();
       Navigator.of(context).pop();

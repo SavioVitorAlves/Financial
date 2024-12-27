@@ -54,6 +54,8 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
     }
 
     try {
+      await Provider.of<DbData>(context, listen: false).insertExtrato(
+          "Devolveu o valor de um Dinheiro", novoValor, DateTime.now());
       await Provider.of<DbData>(context, listen: false)
           .updateDinheiro(widget.id, novoValor);
       Provider.of<DbData>(context, listen: false).loadPessoas();

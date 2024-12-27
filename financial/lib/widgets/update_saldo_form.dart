@@ -40,6 +40,8 @@ class _SaldoFormState extends State<SaldoForm> {
     final result = valor + add;
 
     try {
+      await Provider.of<DbData>(context, listen: false)
+          .insertExtrato("Novo valor ao Saldo", add, DateTime.now());
       await Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
       Provider.of<DbData>(context, listen: false).loadConta();
       Navigator.of(context).pop();
@@ -83,6 +85,8 @@ class _SaldoFormState extends State<SaldoForm> {
     final result = valor - sub;
 
     try {
+      await Provider.of<DbData>(context, listen: false)
+          .insertExtrato("Removeu valor ao Saldo", sub, DateTime.now());
       await Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
       Provider.of<DbData>(context, listen: false).loadConta();
       Navigator.of(context).pop();

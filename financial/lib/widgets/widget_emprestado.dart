@@ -67,6 +67,10 @@ class WidgetEmprestado extends StatelessWidget {
       },
       onDismissed: (_) async {
         try {
+          await Provider.of<DbData>(context, listen: false).insertExtrato(
+              "Deletou: ${emprestado.descricao}",
+              emprestado.valor,
+              DateTime.now());
           await Provider.of<DbData>(context, listen: false)
               .deleteDinheiro(emprestado.id);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

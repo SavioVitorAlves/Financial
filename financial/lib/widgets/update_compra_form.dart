@@ -55,6 +55,8 @@ class _UpdateCompraFormState extends State<UpdateCompraForm> {
 
     try {
       await Provider.of<DbData>(context, listen: false)
+          .insertExtrato("Pagou uma compra", novoValor, DateTime.now());
+      await Provider.of<DbData>(context, listen: false)
           .updateGasto(widget.id, novoValor);
       Provider.of<DbData>(context, listen: false).loadLojas();
       Navigator.of(context).pop();

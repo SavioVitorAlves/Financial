@@ -56,6 +56,8 @@ class _GastoFormState extends State<GastoForm> {
 
     try {
       await Provider.of<DbData>(context, listen: false)
+          .insertExtrato(descricao, valor, DateTime.now());
+      await Provider.of<DbData>(context, listen: false)
           .insertGasto(id, descricao, valor, _selectedDate);
       Provider.of<DbData>(context, listen: false).loadLojas();
       Navigator.of(context).pop();

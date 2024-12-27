@@ -69,6 +69,8 @@ class WidgetGasto extends StatelessWidget {
       },
       onDismissed: (_) async {
         try {
+          await Provider.of<DbData>(context, listen: false).insertExtrato(
+              "Deletou: ${gasto.descricao}", gasto.valor, DateTime.now());
           await Provider.of<DbData>(context, listen: false)
               .deleteGasto(gasto.id);
           ScaffoldMessenger.of(context).showSnackBar(

@@ -71,6 +71,8 @@ class WidgetCredito extends StatelessWidget {
       },
       onDismissed: (_) async {
         try {
+          await Provider.of<DbData>(context, listen: false).insertExtrato(
+              "Deletou: ${credito.descricao}", credito.valor, DateTime.now());
           await Provider.of<DbData>(context, listen: false)
               .deleteCredito(credito.id);
           ScaffoldMessenger.of(context).showSnackBar(

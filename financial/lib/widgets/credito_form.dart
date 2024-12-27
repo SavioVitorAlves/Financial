@@ -56,6 +56,8 @@ class _CreditoFormState extends State<CreditoForm> {
 
     try {
       await Provider.of<DbData>(context, listen: false)
+          .insertExtrato(descricao, valor, DateTime.now());
+      await Provider.of<DbData>(context, listen: false)
           .insertCredito(id, descricao, valor, _selectedDate);
       Provider.of<DbData>(context, listen: false).loadCartoes();
       Navigator.of(context).pop();

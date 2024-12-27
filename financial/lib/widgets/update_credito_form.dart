@@ -55,6 +55,8 @@ class _UpdateCreditoFormState extends State<UpdateCreditoForm> {
 
     try {
       await Provider.of<DbData>(context, listen: false)
+          .insertExtrato("Pagou um credito", novoValor, DateTime.now());
+      await Provider.of<DbData>(context, listen: false)
           .updateCredito(widget.id, novoValor);
       Provider.of<DbData>(context, listen: false).loadCartoes();
       Navigator.of(context).pop();
