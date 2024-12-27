@@ -28,6 +28,20 @@ class _HomeinitialState extends State<Homeinitial> {
             ));
   }
 
+  String _mensagem(double saldo) {
+    String msg = "Continue assim!";
+    if (saldo < 600) {
+      msg = "Seu saldo esta muito baixo!";
+    } else if (saldo >= 600 && saldo < 1000) {
+      msg = "Isso ai! Mantenha o seu saldo acima do atual.";
+    } else if (saldo >= 1000 && saldo < 2000) {
+      msg = "Otimo! Esse é um bom saldo.";
+    } else if (saldo >= 2000) {
+      msg = "Perfeito! Sua saude financeira esta otima.";
+    }
+    return msg;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,9 +118,9 @@ class _HomeinitialState extends State<Homeinitial> {
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text(
-                            'Aqui ficara uma recomendação!',
-                            style: TextStyle(color: Colors.white),
+                          Text(
+                            _mensagem(saldo['saldo']),
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                       )
