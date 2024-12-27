@@ -18,6 +18,10 @@ class DbUtil {
     await db.execute(_credito);
     await db.execute(_conta);
     await db.insert('Conta', {'saldo': 0.0});
+    await db.execute(_extrato);
+
+    //===== Triggers ======
+    await db.execute(_triggerAfterInsertExtrato);
   }
 
   String get _pessoas => '''
@@ -75,6 +79,14 @@ class DbUtil {
     data TEXT NOT NULL,
     FOREIGN KEY (cartao_id) REFERENCES Lojas (id) ON DELETE CASCADE
   );
+  ''';
+  String get _extrato => '''
+    CREATE TABLE Extrato (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      descricao TEXT NOT NULL,
+      valor REAL NOT NULL,
+      data TEXT NOT NULL,
+    );
   ''';
   //INSERIR PESSOA
   Future<void> insertPessoa(Database db, String nome) async {
@@ -347,7 +359,7 @@ class DbUtil {
   }
 
   //==================
-  //PEGAR OS DADOS DE UM CARTÃO
+  //PEGAR OS DADOS DA CONTA
   Future<List<Map<String, dynamic>>> getContaComSaldo(Database db) async {
     final List<Map<String, dynamic>> conta = await db.query('Conta');
     print('tabela conta: $conta');
@@ -355,10 +367,52 @@ class DbUtil {
     return conta.toList();
   }
 
-  //INSERIR CARTAO
+  //INSERIR VALOR NO SALDO DA CONTA
   Future<void> UpdateSaldo(Database db, double valor) async {
     await db.update('Conta', {
       'valor': valor,
     });
   }
+  //================
+
+  //PEGAR OS DADOS DA CONTA
+  Future<List<Map<String, dynamic>>> getExtrato(Database db) async {
+    final List<Map<String, dynamic>> extratos = await db.query('Extrato');
+    print('tabela Extrato: $extratos');
+
+    final List<Map<String, dynamic>> cartoesList = [];
+    for (var extrato in extratos) {
+      print('Local: ${extrato['name']}');
+      final Map<String, dynamic> map = {
+        'id': extrato['id'],
+        'descricao': extrato['descricao'],
+        'valor': extrato['valor'],
+        'data': extrato['data'],
+      };
+      cartoesList.add(map);
+    }
+    print('Resultado final: $cartoesList');
+    return cartoesList.toList();
+  }
+
+  //INSERIR VALOR NO SALDO DA CONTA
+  Future<void> insertExtrato(Database db, Map<String, dynamic> data) async {
+    await db.insert('Extrato', {
+      'descricao': data['descricao'],
+      'valor': data['valor'],
+      'data': data['data'],
+    });
+  }
+
+  // ========= CRIAÇÃO DOS  TRIGGERS =========
+
+  String get _triggerAfterInsertExtrato => '''
+    CREATE TRIGGER after_insert_extrato
+      AFTER INSERT ON Extrato
+      BEGIN
+      DELETE FROM extrato  WHERE id = (
+        SELECT id FROM Extrato ORDER BY data ASC LIMIT 1
+      );
+    END;
+  ''';
 }

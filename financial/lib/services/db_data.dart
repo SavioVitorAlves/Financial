@@ -342,4 +342,42 @@ class DbData with ChangeNotifier {
 
     notifyListeners();
   }
+
+  //===================
+  Map<String, dynamic> _extrato = {};
+
+  Map<String, dynamic> get extrato {
+    return {..._extrato};
+  }
+
+  Future<void> loadExtrato() async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+
+    final result = await dbData.getExtrato(db);
+    print('Resultado vindo do banco: $result');
+
+    Map<String, dynamic> listExtratos = {};
+    for (var extrato in result) {
+      print('Extrato: $extrato');
+      listExtratos = extrato;
+    }
+    _extrato = listExtratos;
+    notifyListeners();
+  }
+
+  Future<void> insertExtrato(
+      String descricao, double valor, DateTime date) async {
+    final dbData = DbUtil();
+    final db = await dbData.database();
+    final Map<String, dynamic> extrato = {
+      'descricao': descricao,
+      'valor': valor,
+      'data': date.toIso8601String(),
+    };
+    dbData.insertExtrato(db, extrato);
+    loadExtrato();
+
+    notifyListeners();
+  }
 }
