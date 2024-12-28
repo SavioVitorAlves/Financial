@@ -370,7 +370,7 @@ class DbUtil {
   //INSERIR VALOR NO SALDO DA CONTA
   Future<void> UpdateSaldo(Database db, double valor) async {
     await db.update('Conta', {
-      'valor': valor,
+      'saldo': valor,
     });
   }
   //================

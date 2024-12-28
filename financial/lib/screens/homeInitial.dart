@@ -33,7 +33,7 @@ class _HomeinitialState extends State<Homeinitial> {
     if (saldo < 600) {
       msg = "Seu saldo esta muito baixo!";
     } else if (saldo >= 600 && saldo < 1000) {
-      msg = "Isso ai! Mantenha o seu saldo acima do atual.";
+      msg = "Mantenha o seu saldo acima do atual.";
     } else if (saldo >= 1000 && saldo < 2000) {
       msg = "Otimo! Esse é um bom saldo.";
     } else if (saldo >= 2000) {
