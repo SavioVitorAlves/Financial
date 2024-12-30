@@ -1,6 +1,7 @@
 import 'package:financial/models/conta.dart';
 import 'package:financial/models/credito.dart';
 import 'package:financial/models/emprestado.dart';
+import 'package:financial/models/extrato.dart';
 import 'package:financial/models/gasto.dart';
 import 'package:financial/models/loja.dart';
 import 'package:financial/models/pessoa.dart';
@@ -344,10 +345,10 @@ class DbData with ChangeNotifier {
   }
 
   //===================
-  Map<String, dynamic> _extrato = {};
+  List<Extrato> _extrato = [];
 
-  Map<String, dynamic> get extrato {
-    return {..._extrato};
+  List<Extrato> get extrato {
+    return [..._extrato];
   }
 
   Future<void> loadExtrato() async {
@@ -357,10 +358,14 @@ class DbData with ChangeNotifier {
     final result = await dbData.getExtrato(db);
     print('Resultado vindo do banco: $result');
 
-    Map<String, dynamic> listExtratos = {};
+    List<Extrato> listExtratos = [];
     for (var extrato in result) {
       print('Extrato: $extrato');
-      listExtratos = extrato;
+      listExtratos.add(Extrato(
+          id: extrato['id'],
+          descricao: extrato['descricao'],
+          valor: extrato['valor'],
+          date: DateTime.parse(extrato['data'])));
     }
     _extrato = listExtratos;
     notifyListeners();
@@ -377,7 +382,6 @@ class DbData with ChangeNotifier {
     };
     dbData.insertExtrato(db, extrato);
     loadExtrato();
-
     notifyListeners();
   }
 }

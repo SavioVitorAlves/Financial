@@ -85,7 +85,7 @@ class DbUtil {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       descricao TEXT NOT NULL,
       valor REAL NOT NULL,
-      data TEXT NOT NULL,
+      data TEXT NOT NULL
     );
   ''';
   //INSERIR PESSOA
@@ -380,19 +380,19 @@ class DbUtil {
     final List<Map<String, dynamic>> extratos = await db.query('Extrato');
     print('tabela Extrato: $extratos');
 
-    final List<Map<String, dynamic>> cartoesList = [];
+    final List<Map<String, dynamic>> extratoList = [];
     for (var extrato in extratos) {
-      print('Local: ${extrato['name']}');
+      print('Local: ${extrato['descricao']}');
       final Map<String, dynamic> map = {
         'id': extrato['id'],
         'descricao': extrato['descricao'],
         'valor': extrato['valor'],
         'data': extrato['data'],
       };
-      cartoesList.add(map);
+      extratoList.add(map);
     }
-    print('Resultado final: $cartoesList');
-    return cartoesList.toList();
+    print('Resultado final: $extratoList');
+    return extratoList.toList();
   }
 
   //INSERIR VALOR NO SALDO DA CONTA
@@ -410,8 +410,13 @@ class DbUtil {
     CREATE TRIGGER after_insert_extrato
       AFTER INSERT ON Extrato
       BEGIN
-      DELETE FROM extrato  WHERE id = (
-        SELECT id FROM Extrato ORDER BY data ASC LIMIT 1
+      DELETE FROM Extrato
+      WHERE id IN (
+          SELECT id
+          FROM Extrato
+          WHERE (SELECT COUNT(*) FROM Extrato) > 5
+          ORDER BY data ASC
+          LIMIT (SELECT COUNT(*) - 5 FROM Extrato)
       );
     END;
   ''';
