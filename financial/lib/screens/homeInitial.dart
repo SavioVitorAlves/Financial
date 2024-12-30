@@ -2,6 +2,7 @@ import 'package:financial/services/db_data.dart';
 import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/funcionalidades.dart';
 import 'package:financial/widgets/update_saldo_form.dart';
+import 'package:financial/widgets/widget_extrato.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class _HomeinitialState extends State<Homeinitial> {
     // TODO: implement initState
     super.initState();
     Provider.of<DbData>(context, listen: false).loadConta();
+    Provider.of<DbData>(context, listen: false).loadExtrato();
   }
 
   _openUpdateSaldoFormModal(BuildContext context, double valor) {
@@ -73,7 +75,9 @@ class _HomeinitialState extends State<Homeinitial> {
                             width: 5,
                           ),
                           Text(
-                            saldo['saldo'].toString(),
+                            saldo['saldo'] == {}
+                                ? "00"
+                                : saldo['saldo'].toString(),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -181,6 +185,28 @@ class _HomeinitialState extends State<Homeinitial> {
                         'Operações Recentes',
                       ),
                     ),
+                    Consumer<DbData>(
+                      builder: (context, value, child) {
+                        final extrato = value.extrato;
+                        return Container(
+                          height: 410,
+                          child: extrato.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    'Não há nenhuma transação.',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  itemCount: extrato.length,
+                                  itemBuilder: (context, index) {
+                                    return WidgetExtrato(
+                                      extrato: extrato[index],
+                                    );
+                                  }),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),
