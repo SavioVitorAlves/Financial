@@ -34,8 +34,9 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
       return;
     }
     final double novoValor;
-    if (double.parse(_valorControler.text) <= widget.valorAtual) {
-      novoValor = widget.valorAtual - double.parse(_valorControler.text);
+    final double sub = double.parse(_valorControler.text);
+    if (sub <= widget.valorAtual) {
+      novoValor = widget.valorAtual - sub;
     } else {
       showDialog(
         context: context,
@@ -54,12 +55,33 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
     }
 
     try {
-      await Provider.of<DbData>(context, listen: false).insertExtrato(
-          "Devolveu o valor de um Dinheiro", novoValor, DateTime.now());
-      await Provider.of<DbData>(context, listen: false)
-          .updateDinheiro(widget.id, novoValor);
-      Provider.of<DbData>(context, listen: false).loadPessoas();
-      Navigator.of(context).pop();
+      final saldo = Provider.of<DbData>(context, listen: false).conta['saldo'];
+      if (sub <= saldo) {
+        final result = saldo - sub;
+        await Provider.of<DbData>(context).UpdateSaldo(result);
+        await Provider.of<DbData>(context, listen: false).insertExtrato(
+            "Devolveu o valor de um Dinheiro", novoValor, DateTime.now());
+        await Provider.of<DbData>(context, listen: false)
+            .updateDinheiro(widget.id, novoValor);
+        Provider.of<DbData>(context, listen: false).loadPessoas();
+        Provider.of<DbData>(context, listen: false).loadConta();
+        Navigator.of(context).pop();
+      } else {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Saldo insulficiente!'),
+            content:
+                const Text('Por favor, insira um valor abaixo do seu saldo.'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'))
+            ],
+          ),
+        );
+        return;
+      }
     } catch (error) {
       await showDialog(
           context: context,

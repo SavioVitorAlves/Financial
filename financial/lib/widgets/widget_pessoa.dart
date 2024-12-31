@@ -30,12 +30,33 @@ class WidgetPessoa extends StatelessWidget {
             actions: [
               TextButton(
                   onPressed: () {
-                    Provider.of<DbData>(context, listen: false)
-                        .deletePessoa(pessoa.id);
-                    Provider.of<DbData>(context, listen: false).loadPessoas();
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Pessoa removida com sucesso!')));
-                    Navigator.of(context).pop();
+                    final saldo = Provider.of<DbData>(context, listen: false)
+                        .conta['saldo'];
+                    if (valorTotal(pessoa.dinheiro) <= saldo) {
+                      final result = saldo - valorTotal(pessoa.dinheiro);
+                      Provider.of<DbData>(context).UpdateSaldo(result);
+                      Provider.of<DbData>(context, listen: false)
+                          .deletePessoa(pessoa.id);
+                      Provider.of<DbData>(context, listen: false).loadPessoas();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Pessoa removida com sucesso!')));
+                      Navigator.of(context).pop();
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Saldo insulficiente!'),
+                          content: const Text(
+                              'A pessoa que você deseja deletar tem um valor acima do seu saldo.'),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(),
+                                child: const Text('OK'))
+                          ],
+                        ),
+                      );
+                      return;
+                    }
                   },
                   child: const Text('Sim')),
               TextButton(

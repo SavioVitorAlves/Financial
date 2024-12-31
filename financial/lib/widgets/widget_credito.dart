@@ -71,12 +71,33 @@ class WidgetCredito extends StatelessWidget {
       },
       onDismissed: (_) async {
         try {
-          await Provider.of<DbData>(context, listen: false).insertExtrato(
-              "Deletou: ${credito.descricao}", credito.valor, DateTime.now());
-          await Provider.of<DbData>(context, listen: false)
-              .deleteCredito(credito.id);
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Compra removida com sucesso')));
+          final saldo =
+              Provider.of<DbData>(context, listen: false).conta['saldo'];
+          if (credito.valor <= saldo) {
+            final result = saldo - credito.valor;
+            await Provider.of<DbData>(context).UpdateSaldo(result);
+            await Provider.of<DbData>(context, listen: false).insertExtrato(
+                "Deletou: ${credito.descricao}", credito.valor, DateTime.now());
+            await Provider.of<DbData>(context, listen: false)
+                .deleteCredito(credito.id);
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Compra removida com sucesso')));
+          } else {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('Saldo insulficiente!'),
+                content: const Text(
+                    'O item que você deseja deletar tem um valor acima do seu saldo.'),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      child: const Text('OK'))
+                ],
+              ),
+            );
+            return;
+          }
         } catch (error) {
           // Reverter o estado se falhar
           ScaffoldMessenger.of(context).showSnackBar(

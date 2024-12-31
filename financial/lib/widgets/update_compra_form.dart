@@ -34,8 +34,9 @@ class _UpdateCompraFormState extends State<UpdateCompraForm> {
       return;
     }
     final double novoValor;
-    if (double.parse(_valorControler.text) <= widget.valorAtual) {
-      novoValor = widget.valorAtual - double.parse(_valorControler.text);
+    final double sub = double.parse(_valorControler.text);
+    if (sub <= widget.valorAtual) {
+      novoValor = widget.valorAtual - sub;
     } else {
       showDialog(
         context: context,
@@ -54,12 +55,33 @@ class _UpdateCompraFormState extends State<UpdateCompraForm> {
     }
 
     try {
-      await Provider.of<DbData>(context, listen: false)
-          .insertExtrato("Pagou uma compra", novoValor, DateTime.now());
-      await Provider.of<DbData>(context, listen: false)
-          .updateGasto(widget.id, novoValor);
-      Provider.of<DbData>(context, listen: false).loadLojas();
-      Navigator.of(context).pop();
+      final saldo = Provider.of<DbData>(context, listen: false).conta['saldo'];
+      if (sub <= saldo) {
+        final result = saldo - sub;
+        await Provider.of<DbData>(context).UpdateSaldo(result);
+        await Provider.of<DbData>(context, listen: false)
+            .insertExtrato("Pagou uma compra", novoValor, DateTime.now());
+        await Provider.of<DbData>(context, listen: false)
+            .updateGasto(widget.id, novoValor);
+        Provider.of<DbData>(context, listen: false).loadLojas();
+        Provider.of<DbData>(context, listen: false).loadConta();
+        Navigator.of(context).pop();
+      } else {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Saldo insulficiente!'),
+            content:
+                const Text('Por favor, insira um valor abaixo do seu saldo.'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'))
+            ],
+          ),
+        );
+        return;
+      }
     } catch (error) {
       await showDialog(
           context: context,

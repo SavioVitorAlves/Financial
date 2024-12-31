@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:financial/models/card.dart' as custom_card;
+import 'package:financial/models/credito.dart';
 import 'package:financial/services/db_data.dart';
 import 'package:financial/widgets/update_emprestado_form.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,14 @@ class WidgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double valorTotal(List<Credito> credito) {
+      double valorTotal = 0.0;
+      for (var cred in credito) {
+        valorTotal += cred.valor;
+      }
+      return valorTotal;
+    }
+
     int cor = int.parse("0xff${card.cor}");
     int cor99 = int.parse("0x99${card.cor}");
     return Dismissible(
@@ -52,10 +61,31 @@ class WidgetCard extends StatelessWidget {
       },
       onDismissed: (_) async {
         try {
-          await Provider.of<DbData>(context, listen: false)
-              .deleteCartao(card.id);
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Cartão removido com sucesso')));
+          final saldo =
+              Provider.of<DbData>(context, listen: false).conta['saldo'];
+          if (valorTotal(card.credito) <= saldo) {
+            final result = saldo - valorTotal(card.credito);
+            Provider.of<DbData>(context).UpdateSaldo(result);
+            await Provider.of<DbData>(context, listen: false)
+                .deleteCartao(card.id);
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Cartão removido com sucesso')));
+          } else {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('Saldo insulficiente!'),
+                content: const Text(
+                    'O cartão que você deseja deletar tem um valor acima do seu saldo.'),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      child: const Text('OK'))
+                ],
+              ),
+            );
+            return;
+          }
         } catch (error) {
           // Reverter o estado se falhar
           ScaffoldMessenger.of(context).showSnackBar(
