@@ -5,6 +5,8 @@ import 'package:financial/screens/money.dart';
 import 'package:financial/screens/cards.dart';
 import 'package:financial/screens/homeInitial.dart';
 import 'package:financial/screens/parcelado.dart';
+import 'package:financial/screens/successfully/deleting_successfully.dart';
+import 'package:financial/screens/successfully/pagamento_successfully.dart';
 import 'package:financial/services/db_data.dart';
 import 'package:financial/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,10 @@ class MyApp extends StatelessWidget {
           AppRoutes.DETAIL_PESSOA_SCREEN: (ctx) => const DetailPessoaScreen(),
           AppRoutes.DETAIL_LOJA_SCREEN: (ctx) => const DetailLojaScreen(),
           AppRoutes.DETAIL_CARTAO_SCREEN: (ctx) => const DetailCartaoScreen(),
+          AppRoutes.DELETING_SUCCESSFULLY: (ctx) =>
+              const DeletingSuccessfully(),
+          AppRoutes.PAGAMENTO_SUCCESSFULLY: (ctx) =>
+              const PagamentoSuccessfully(),
         },
       ),
     );
