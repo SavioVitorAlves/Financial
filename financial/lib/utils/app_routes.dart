@@ -1,5 +1,6 @@
 class AppRoutes {
-  static const HOME = '/';
+  static const INICIAL = '/';
+  static const HOME = '/home';
   static const EMPRESTADO = '/emprestado';
   static const PARCELADO = '/parcelado';
   static const CARTOES = '/cartoes';

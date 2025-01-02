@@ -5,6 +5,7 @@ import 'package:financial/screens/money.dart';
 import 'package:financial/screens/cards.dart';
 import 'package:financial/screens/homeInitial.dart';
 import 'package:financial/screens/parcelado.dart';
+import 'package:financial/screens/start.dart';
 import 'package:financial/screens/successfully/deleting_successfully.dart';
 import 'package:financial/screens/successfully/pagamento_successfully.dart';
 import 'package:financial/services/db_data.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         //home: const Homeinitial(),
         routes: {
+          AppRoutes.INICIAL: (ctx) => const Start(),
           AppRoutes.HOME: (ctx) => const Homeinitial(),
           AppRoutes.EMPRESTADO: (ctx) => const Money(),
           AppRoutes.PARCELADO: (ctx) => const Parcelado(),
