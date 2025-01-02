@@ -3,6 +3,7 @@ import 'package:financial/models/gasto.dart';
 import 'package:financial/models/loja.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,9 @@ class WidgetLoja extends StatelessWidget {
                       Provider.of<DbData>(context, listen: false).loadLojas();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Loja removida com sucesso!')));
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.DELETING_SUCCESSFULLY,
+                      );
                     } else {
                       showDialog(
                         context: context,

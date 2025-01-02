@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:financial/models/card.dart' as custom_card;
 import 'package:financial/models/credito.dart';
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/update_emprestado_form.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -65,11 +66,14 @@ class WidgetCard extends StatelessWidget {
               Provider.of<DbData>(context, listen: false).conta['saldo'];
           if (valorTotal(card.credito) <= saldo) {
             final result = saldo - valorTotal(card.credito);
-            Provider.of<DbData>(context).UpdateSaldo(result);
+            Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
             await Provider.of<DbData>(context, listen: false)
                 .deleteCartao(card.id);
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Cartão removido com sucesso')));
+            Navigator.of(context).pushNamed(
+              AppRoutes.DELETING_SUCCESSFULLY,
+            );
           } else {
             showDialog(
               context: context,

@@ -1,6 +1,7 @@
 import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,13 +35,16 @@ class WidgetPessoa extends StatelessWidget {
                         .conta['saldo'];
                     if (valorTotal(pessoa.dinheiro) <= saldo) {
                       final result = saldo - valorTotal(pessoa.dinheiro);
-                      Provider.of<DbData>(context).UpdateSaldo(result);
+                      Provider.of<DbData>(context, listen: false)
+                          .UpdateSaldo(result);
                       Provider.of<DbData>(context, listen: false)
                           .deletePessoa(pessoa.id);
                       Provider.of<DbData>(context, listen: false).loadPessoas();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Pessoa removida com sucesso!')));
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.DELETING_SUCCESSFULLY,
+                      );
                     } else {
                       showDialog(
                         context: context,
