@@ -74,7 +74,7 @@ class _DetailPessoaScreenState extends State<DetailPessoaScreen> {
                   height: 15,
                 ),
                 Container(
-                  height: 400,
+                  height: 500,
                   child: pessoa.dinheiro.isEmpty
                       ? const Center(
                           child: Text(

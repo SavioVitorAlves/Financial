@@ -15,8 +15,9 @@ class Funcionalidades extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.blue, width: 2.0)),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(height: 60, width: 60, child: Image.asset(url)),
+          Container(height: 50, width: 50, child: Image.asset(url)),
           Text(name),
         ],
       ),

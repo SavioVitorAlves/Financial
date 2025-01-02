@@ -97,7 +97,7 @@ class _CardsState extends State<Cards> {
                     ),
 
                     Container(
-                      height: 400,
+                      height: 500,
                       child: cartoes.isEmpty
                           ? const Center(
                               child: Text(

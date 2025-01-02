@@ -95,7 +95,7 @@ class _MoneyState extends State<Money> {
                     ),
 
                     Container(
-                      height: 400,
+                      height: 500,
                       child: pessoas.isEmpty
                           ? const Center(
                               child: Text(

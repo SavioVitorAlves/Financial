@@ -95,7 +95,7 @@ class _ParceladoState extends State<Parcelado> {
                       height: 20,
                     ),
                     Container(
-                      height: 400,
+                      height: 500,
                       child: lojas.isEmpty
                           ? const Center(
                               child: Text(

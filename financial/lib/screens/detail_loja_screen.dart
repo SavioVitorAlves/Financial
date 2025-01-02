@@ -77,7 +77,7 @@ class _DetailLojaScreenState extends State<DetailLojaScreen> {
                   height: 15,
                 ),
                 Container(
-                  height: 400,
+                  height: 500,
                   child: loja.compra.isEmpty
                       ? const Center(
                           child: Text(

@@ -79,7 +79,7 @@ class _DetailCartaoScreenState extends State<DetailCartaoScreen> {
                   height: 15,
                 ),
                 Container(
-                  height: 400,
+                  height: 500,
                   child: card.credito.isEmpty
                       ? const Center(
                           child: Text(
