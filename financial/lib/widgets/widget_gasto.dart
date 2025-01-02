@@ -1,6 +1,7 @@
 import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/gasto.dart';
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/emprestado_form.dart';
 import 'package:financial/widgets/update_compra_form.dart';
 import 'package:financial/widgets/update_emprestado_form.dart';
@@ -80,6 +81,9 @@ class WidgetGasto extends StatelessWidget {
                 .deleteGasto(gasto.id);
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Compra removida com sucesso')));
+            Navigator.of(context).pushNamed(
+              AppRoutes.PAGAMENTO_SUCCESSFULLY,
+            );
           } else {
             showDialog(
               context: context,

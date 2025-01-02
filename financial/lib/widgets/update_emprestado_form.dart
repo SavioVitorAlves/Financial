@@ -1,4 +1,5 @@
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -65,7 +66,9 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
             .updateDinheiro(widget.id, novoValor);
         Provider.of<DbData>(context, listen: false).loadPessoas();
         Provider.of<DbData>(context, listen: false).loadConta();
-        Navigator.of(context).pop();
+        Navigator.of(context).pushNamed(
+          AppRoutes.PAGAMENTO_SUCCESSFULLY,
+        );
       } else {
         showDialog(
           context: context,
