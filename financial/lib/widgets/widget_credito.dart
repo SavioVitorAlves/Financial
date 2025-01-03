@@ -127,12 +127,14 @@ class WidgetCredito extends StatelessWidget {
                 color: Colors.blue,
               ),
               child: Center(
-                child: Text(
-                  credito.valor.toString(), //valor que foi pegado
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                child: FittedBox(
+                  child: Text(
+                    credito.valor.toString(), //valor que foi pegado
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),

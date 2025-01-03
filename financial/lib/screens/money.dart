@@ -1,8 +1,11 @@
+import 'package:financial/models/emprestado.dart';
+import 'package:financial/models/pessoa.dart';
 import 'package:financial/services/db_data.dart';
 import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/people_form.dart';
 import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Money extends StatefulWidget {
@@ -23,6 +26,25 @@ class _MoneyState extends State<Money> {
 
   _openPeopleFormModal(BuildContext context) {
     showModalBottomSheet(context: context, builder: (_) => PeopleForm());
+  }
+
+  double valorTotal(List<Pessoa> pessoas) {
+    double valorTotal = 0.0;
+    for (var pessoa in pessoas) {
+      for (var dinheiro in pessoa.dinheiro) {
+        valorTotal += dinheiro.valor;
+      }
+    }
+    return valorTotal;
+  }
+
+  String formatarValor(double valor) {
+    final formatador = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '', // Sem símbolo de moeda
+      decimalDigits: 2,
+    );
+    return formatador.format(valor);
   }
 
   @override
@@ -53,7 +75,7 @@ class _MoneyState extends State<Money> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Icon(
                           Icons.monetization_on_outlined,
@@ -64,7 +86,7 @@ class _MoneyState extends State<Money> {
                           width: 5,
                         ),
                         Text(
-                          '8,420.00',
+                          'R\$ ${formatarValor(valorTotal(pessoas))}',
                           style: TextStyle(
                               color: Color.fromARGB(255, 2, 19, 119),
                               fontSize: 30,

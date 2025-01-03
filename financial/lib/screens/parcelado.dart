@@ -1,9 +1,11 @@
+import 'package:financial/models/loja.dart';
 import 'package:financial/services/db_data.dart';
 import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/loja_form.dart';
 
 import 'package:financial/widgets/widget_loja.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Parcelado extends StatefulWidget {
@@ -24,6 +26,25 @@ class _ParceladoState extends State<Parcelado> {
 
   _openStoreFormModal(BuildContext context) {
     showModalBottomSheet(context: context, builder: (_) => const LojaForm());
+  }
+
+  double valorTotal(List<Loja> lojas) {
+    double valorTotal = 0.0;
+    for (var loja in lojas) {
+      for (var compra in loja.compra) {
+        valorTotal += compra.valor;
+      }
+    }
+    return valorTotal;
+  }
+
+  String formatarValor(double valor) {
+    final formatador = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '', // Sem símbolo de moeda
+      decimalDigits: 2,
+    );
+    return formatador.format(valor);
   }
 
   @override
@@ -54,7 +75,7 @@ class _ParceladoState extends State<Parcelado> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Icon(
                           Icons.monetization_on_outlined,
@@ -65,7 +86,7 @@ class _ParceladoState extends State<Parcelado> {
                           width: 5,
                         ),
                         Text(
-                          '8,420.00',
+                          'R\$ ${formatarValor(valorTotal(lojas))}',
                           style: TextStyle(
                               color: Color.fromARGB(255, 2, 19, 119),
                               fontSize: 30,

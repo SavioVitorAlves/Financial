@@ -1,8 +1,10 @@
+import 'package:financial/models/emprestado.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/widgets/emprestado_form.dart';
 import 'package:financial/widgets/widget_emprestado.dart';
 import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailPessoaScreen extends StatefulWidget {
   const DetailPessoaScreen({super.key});
@@ -18,6 +20,23 @@ class _DetailPessoaScreenState extends State<DetailPessoaScreen> {
         builder: (_) => EmprestadoForm(
               id: id,
             ));
+  }
+
+  double valorTotal(List<Emprestado> emprestado) {
+    double valorTotal = 0.0;
+    for (var dinheiro in emprestado) {
+      valorTotal += dinheiro.valor;
+    }
+    return valorTotal;
+  }
+
+  String formatarValor(double valor) {
+    final formatador = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '', // Sem símbolo de moeda
+      decimalDigits: 2,
+    );
+    return formatador.format(valor);
   }
 
   @override
@@ -46,7 +65,7 @@ class _DetailPessoaScreenState extends State<DetailPessoaScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
+                Row(
                   children: [
                     Icon(
                       Icons.monetization_on_outlined,
@@ -57,7 +76,7 @@ class _DetailPessoaScreenState extends State<DetailPessoaScreen> {
                       width: 5,
                     ),
                     Text(
-                      '8,420.00',
+                      formatarValor(valorTotal(pessoa.dinheiro)),
                       style: TextStyle(
                           color: Color.fromARGB(255, 2, 19, 119),
                           fontSize: 30,

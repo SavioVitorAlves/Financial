@@ -129,12 +129,14 @@ class WidgetEmprestado extends StatelessWidget {
                 color: Colors.blue,
               ),
               child: Center(
-                child: Text(
-                  emprestado.valor.toString(), //valor que foi pegado
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                child: FittedBox(
+                  child: Text(
+                    emprestado.valor.toString(), //valor que foi pegado
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),

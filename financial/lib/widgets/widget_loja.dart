@@ -124,7 +124,7 @@ class WidgetLoja extends StatelessWidget {
               Text(loja.nome,
                   style:
                       const TextStyle(color: Color.fromARGB(255, 2, 19, 119))),
-              Text(valorTotal(loja.compra).toString(),
+              Text("R\$ ${valorTotal(loja.compra).toString()}",
                   style:
                       const TextStyle(color: Color.fromARGB(255, 2, 19, 119))),
             ],

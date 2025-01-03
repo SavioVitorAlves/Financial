@@ -123,7 +123,7 @@ class WidgetPessoa extends StatelessWidget {
               Text(pessoa.nome,
                   style:
                       const TextStyle(color: Color.fromARGB(255, 2, 19, 119))),
-              Text(valorTotal(pessoa.dinheiro).toString(),
+              Text('R\$ ${valorTotal(pessoa.dinheiro).toString()}',
                   style:
                       const TextStyle(color: Color.fromARGB(255, 2, 19, 119))),
             ],

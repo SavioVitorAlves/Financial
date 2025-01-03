@@ -1,3 +1,4 @@
+import 'package:financial/models/gasto.dart';
 import 'package:financial/models/loja.dart';
 import 'package:financial/models/pessoa.dart';
 import 'package:financial/widgets/emprestado_form.dart';
@@ -6,6 +7,7 @@ import 'package:financial/widgets/widget_emprestado.dart';
 import 'package:financial/widgets/widget_gasto.dart';
 import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailLojaScreen extends StatefulWidget {
   const DetailLojaScreen({super.key});
@@ -21,6 +23,23 @@ class _DetailLojaScreenState extends State<DetailLojaScreen> {
         builder: (_) => GastoForm(
               id: id,
             ));
+  }
+
+  double valorTotal(List<Gasto> gastos) {
+    double valorTotal = 0.0;
+    for (var gasto in gastos) {
+      valorTotal += gasto.valor;
+    }
+    return valorTotal;
+  }
+
+  String formatarValor(double valor) {
+    final formatador = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '', // Sem símbolo de moeda
+      decimalDigits: 2,
+    );
+    return formatador.format(valor);
   }
 
   @override
@@ -49,7 +68,7 @@ class _DetailLojaScreenState extends State<DetailLojaScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
+                Row(
                   children: [
                     Icon(
                       Icons.monetization_on_outlined,
@@ -60,7 +79,7 @@ class _DetailLojaScreenState extends State<DetailLojaScreen> {
                       width: 5,
                     ),
                     Text(
-                      '8,420.00',
+                      formatarValor(valorTotal(loja.compra)),
                       style: TextStyle(
                           color: Color.fromARGB(255, 2, 19, 119),
                           fontSize: 30,

@@ -129,12 +129,14 @@ class WidgetGasto extends StatelessWidget {
                 color: Colors.blue,
               ),
               child: Center(
-                child: Text(
-                  gasto.valor.toString(), //valor que foi pegado
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                child: FittedBox(
+                  child: Text(
+                    gasto.valor.toString(), //valor que foi pegado
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),

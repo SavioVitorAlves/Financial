@@ -3,8 +3,10 @@ import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/cartao_form.dart';
 import 'package:financial/widgets/people_form.dart';
 import 'package:financial/widgets/widget_card.dart';
+import 'package:financial/models/card.dart' as custom_card;
 import 'package:financial/widgets/widget_pessoa.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Cards extends StatefulWidget {
@@ -25,6 +27,25 @@ class _CardsState extends State<Cards> {
 
   _openCartaoFormModal(BuildContext context) {
     showModalBottomSheet(context: context, builder: (_) => const CartaoForm());
+  }
+
+  double valorTotal(List<custom_card.Card> cards) {
+    double valorTotal = 0.0;
+    for (var cartoes in cards) {
+      for (var credito in cartoes.credito) {
+        valorTotal += credito.valor;
+      }
+    }
+    return valorTotal;
+  }
+
+  String formatarValor(double valor) {
+    final formatador = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '', // Sem símbolo de moeda
+      decimalDigits: 2,
+    );
+    return formatador.format(valor);
   }
 
   @override
@@ -55,7 +76,7 @@ class _CardsState extends State<Cards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Icon(
                           Icons.monetization_on_outlined,
@@ -66,7 +87,7 @@ class _CardsState extends State<Cards> {
                           width: 5,
                         ),
                         Text(
-                          '8,420.00',
+                          'R\$ ${formatarValor(valorTotal(cartoes))}',
                           style: TextStyle(
                               color: Color.fromARGB(255, 2, 19, 119),
                               fontSize: 30,
