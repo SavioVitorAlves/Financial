@@ -4,6 +4,7 @@ import 'package:financial/widgets/funcionalidades.dart';
 import 'package:financial/widgets/update_saldo_form.dart';
 import 'package:financial/widgets/widget_extrato.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Homeinitial extends StatefulWidget {
@@ -44,6 +45,15 @@ class _HomeinitialState extends State<Homeinitial> {
     return msg;
   }
 
+  String formatarValor(double valor) {
+    final formatador = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '', // Sem símbolo de moeda
+      decimalDigits: 2,
+    );
+    return formatador.format(valor);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +61,10 @@ class _HomeinitialState extends State<Homeinitial> {
         child: Column(
           children: [
             Consumer<DbData>(builder: (context, valor, child) {
+              if (valor.conta == null || valor.conta.isEmpty) {
+                // Se os dados não estão carregados, exibe o CircularProgressIndicator
+                return const Center(child: CircularProgressIndicator());
+              }
               final saldo = valor.conta;
               print('Saldo: $saldo');
               return Container(
@@ -74,23 +88,27 @@ class _HomeinitialState extends State<Homeinitial> {
                           const SizedBox(
                             width: 5,
                           ),
-                          Text(
-                            saldo['saldo'] == {}
-                                ? "00"
-                                : saldo['saldo'].toString(),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
+                          FittedBox(
+                            child: Text(
+                              saldo['saldo'] == {}
+                                  ? "00"
+                                  : formatarValor(saldo['saldo']),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const Spacer(),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(120, 10),
-                                backgroundColor:
-                                    const Color.fromARGB(120, 255, 255, 255),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
+                              fixedSize: const Size(100, 10),
+                              backgroundColor:
+                                  const Color.fromARGB(120, 255, 255, 255),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: EdgeInsets.zero,
+                            ),
                             onPressed: () => _openUpdateSaldoFormModal(
                                 context, saldo['saldo']),
                             child: const Text('ADD/SUB',

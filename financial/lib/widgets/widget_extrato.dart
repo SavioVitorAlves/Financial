@@ -24,6 +24,7 @@ class WidgetExtrato extends StatelessWidget {
           Container(
             height: 50,
             width: 50,
+            padding: EdgeInsets.only(left: 3, right: 3),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Colors.blue,
