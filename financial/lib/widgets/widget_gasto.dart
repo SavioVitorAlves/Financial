@@ -48,25 +48,53 @@ class WidgetGasto extends StatelessWidget {
           right: 20,
         ),
       ),
-      confirmDismiss: (_) {
-        return showDialog(
+      confirmDismiss: (_) async {
+        // Exibe o diálogo de confirmação
+        final confirm = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Tem Certeza?'),
+            content: const Text('Quer deletar esse dinheiro emprestado?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('Não'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('Sim'),
+              ),
+            ],
+          ),
+        );
+
+        // Se o usuário não confirmar, cancela a remoção
+        if (confirm != true) return false;
+
+        // Verifica saldo antes de permitir a remoção
+        final saldo =
+            Provider.of<DbData>(context, listen: false).conta['saldo'];
+        if (gasto.valor > saldo) {
+          // Exibe alerta de saldo insuficiente
+          showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-                  title: const Text('Tem Certeza?'),
-                  content: const Text('Quer deletar essa compra?'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: const Text('Não')),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        child: const Text('Sim'))
-                  ],
-                ));
+              title: const Text('Saldo insuficiente!'),
+              content: const Text(
+                'O item que você deseja deletar tem um valor acima do seu saldo.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+          return false; // Impede a remoção visual
+        }
+
+        return true; // Permite a remoção visual
       },
       onDismissed: (_) async {
         try {
@@ -74,7 +102,8 @@ class WidgetGasto extends StatelessWidget {
               Provider.of<DbData>(context, listen: false).conta['saldo'];
           if (gasto.valor <= saldo) {
             final result = saldo - gasto.valor;
-            await Provider.of<DbData>(context).UpdateSaldo(result);
+            await Provider.of<DbData>(context, listen: false)
+                .UpdateSaldo(result);
             await Provider.of<DbData>(context, listen: false).insertExtrato(
                 "Deletou: ${gasto.descricao}", gasto.valor, DateTime.now());
             await Provider.of<DbData>(context, listen: false)

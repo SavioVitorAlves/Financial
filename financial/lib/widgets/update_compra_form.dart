@@ -59,7 +59,7 @@ class _UpdateCompraFormState extends State<UpdateCompraForm> {
       final saldo = Provider.of<DbData>(context, listen: false).conta['saldo'];
       if (sub <= saldo) {
         final result = saldo - sub;
-        await Provider.of<DbData>(context).UpdateSaldo(result);
+        await Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
         await Provider.of<DbData>(context, listen: false)
             .insertExtrato("Pagou uma compra", novoValor, DateTime.now());
         await Provider.of<DbData>(context, listen: false)

@@ -1,4 +1,5 @@
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/datePicker.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,7 @@ class _GastoFormState extends State<GastoForm> {
       await Provider.of<DbData>(context, listen: false)
           .insertGasto(id, descricao, valor, _selectedDate);
       Provider.of<DbData>(context, listen: false).loadLojas();
-      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed(AppRoutes.PARCELADO);
     } catch (error) {
       await showDialog(
           context: context,

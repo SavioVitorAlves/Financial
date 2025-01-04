@@ -36,10 +36,12 @@ class WidgetLoja extends StatelessWidget {
                     final saldo = Provider.of<DbData>(context, listen: false)
                         .conta['saldo'];
                     if (valorTotal(loja.compra) <= saldo) {
-                      final result = saldo - valorTotal(loja.compra);
-                      Provider.of<DbData>(context).UpdateSaldo(result);
                       Provider.of<DbData>(context, listen: false)
                           .deleteLoja(loja.id);
+                      final result = saldo - valorTotal(loja.compra);
+                      Provider.of<DbData>(context, listen: false)
+                          .UpdateSaldo(result);
+
                       Provider.of<DbData>(context, listen: false).loadLojas();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Loja removida com sucesso!')));

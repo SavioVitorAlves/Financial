@@ -1,4 +1,5 @@
 import 'package:financial/services/db_data.dart';
+import 'package:financial/utils/app_routes.dart';
 import 'package:financial/widgets/datePicker.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,7 @@ class _CreditoFormState extends State<CreditoForm> {
       await Provider.of<DbData>(context, listen: false)
           .insertCredito(id, descricao, valor, _selectedDate);
       Provider.of<DbData>(context, listen: false).loadCartoes();
-      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed(AppRoutes.CARTOES);
     } catch (error) {
       await showDialog(
           context: context,

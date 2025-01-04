@@ -36,9 +36,10 @@ class WidgetPessoa extends StatelessWidget {
                     if (valorTotal(pessoa.dinheiro) <= saldo) {
                       final result = saldo - valorTotal(pessoa.dinheiro);
                       Provider.of<DbData>(context, listen: false)
-                          .UpdateSaldo(result);
-                      Provider.of<DbData>(context, listen: false)
                           .deletePessoa(pessoa.id);
+                      Provider.of<DbData>(context, listen: false)
+                          .UpdateSaldo(result);
+
                       Provider.of<DbData>(context, listen: false).loadPessoas();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Pessoa removida com sucesso!')));

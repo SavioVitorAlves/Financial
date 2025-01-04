@@ -38,7 +38,6 @@ class _SaldoFormState extends State<SaldoForm> {
     final double valor = widget.valor;
 
     final result = valor + add;
-
     try {
       await Provider.of<DbData>(context, listen: false)
           .insertExtrato("Novo valor ao Saldo", add, DateTime.now());
@@ -82,27 +81,44 @@ class _SaldoFormState extends State<SaldoForm> {
     final double sub = double.parse(_SubtractControler.text);
     final double valor = widget.valor;
 
-    final result = valor - sub;
+    if (valor >= sub) {
+      final result = valor - sub;
 
-    try {
-      await Provider.of<DbData>(context, listen: false)
-          .insertExtrato("Removeu valor ao Saldo", sub, DateTime.now());
-      await Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
-      Provider.of<DbData>(context, listen: false).loadConta();
-      Navigator.of(context).pop();
-    } catch (error) {
-      await showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                title: const Text('Ocorreu um erro!'),
-                content: Text(
-                    'Ocorreu um erro ao atualizar o saldo da sua conta! Error: $error'),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      child: const Text('OK'))
-                ],
-              ));
+      try {
+        await Provider.of<DbData>(context, listen: false)
+            .insertExtrato("Removeu valor ao Saldo", sub, DateTime.now());
+        await Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
+        Provider.of<DbData>(context, listen: false).loadConta();
+        Navigator.of(context).pop();
+      } catch (error) {
+        await showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: const Text('Ocorreu um erro!'),
+                  content: Text(
+                      'Ocorreu um erro ao atualizar o saldo da sua conta! Error: $error'),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        child: const Text('OK'))
+                  ],
+                ));
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Saldo insulficiente!'),
+          content: const Text(
+              'O saldo da sua conta é inferior ao valor que deseja subrtair.'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('OK'))
+          ],
+        ),
+      );
+      return;
     }
   }
 

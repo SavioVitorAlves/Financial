@@ -59,7 +59,7 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
       final saldo = Provider.of<DbData>(context, listen: false).conta['saldo'];
       if (sub <= saldo) {
         final result = saldo - sub;
-        await Provider.of<DbData>(context).UpdateSaldo(result);
+        await Provider.of<DbData>(context, listen: false).UpdateSaldo(result);
         await Provider.of<DbData>(context, listen: false).insertExtrato(
             "Devolveu o valor de um Dinheiro", novoValor, DateTime.now());
         await Provider.of<DbData>(context, listen: false)
@@ -91,7 +91,7 @@ class _UpdateEmprestadoFormState extends State<UpdateEmprestadoForm> {
           builder: (ctx) => AlertDialog(
                 title: const Text('Ocorreu um erro!'),
                 content: Text(
-                    'Ocorreu um erro ao adicionar um novo dinheiro emprestado! Error: $error'),
+                    'Ocorreu um erro ao subtrair um valor do dinheiro emprestado! Error: $error'),
                 actions: [
                   TextButton(
                       onPressed: () => Navigator.of(ctx).pop(),

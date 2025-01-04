@@ -46,39 +46,69 @@ class WidgetEmprestado extends StatelessWidget {
           right: 20,
         ),
       ),
-      confirmDismiss: (_) {
-        return showDialog(
+      confirmDismiss: (_) async {
+        // Exibe o diálogo de confirmação
+        final confirm = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Tem Certeza?'),
+            content: const Text('Quer deletar esse dinheiro emprestado?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('Não'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('Sim'),
+              ),
+            ],
+          ),
+        );
+
+        // Se o usuário não confirmar, cancela a remoção
+        if (confirm != true) return false;
+
+        // Verifica saldo antes de permitir a remoção
+        final saldo =
+            Provider.of<DbData>(context, listen: false).conta['saldo'];
+        if (emprestado.valor > saldo) {
+          // Exibe alerta de saldo insuficiente
+          showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-                  title: const Text('Tem Certeza?'),
-                  content: const Text('Quer deletar esse dinheiro emprestado?'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: const Text('Não')),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        child: const Text('Sim'))
-                  ],
-                ));
+              title: const Text('Saldo insuficiente!'),
+              content: const Text(
+                'O item que você deseja deletar tem um valor acima do seu saldo.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+          return false; // Impede a remoção visual
+        }
+
+        return true; // Permite a remoção visual
       },
       onDismissed: (_) async {
         try {
           final saldo =
               Provider.of<DbData>(context, listen: false).conta['saldo'];
           if (emprestado.valor <= saldo) {
+            Provider.of<DbData>(context, listen: false)
+                .deleteDinheiro(emprestado.id);
             final result = saldo - emprestado.valor;
-            await Provider.of<DbData>(context).UpdateSaldo(result);
+            await Provider.of<DbData>(context, listen: false)
+                .UpdateSaldo(result);
             await Provider.of<DbData>(context, listen: false).insertExtrato(
                 "Deletou: ${emprestado.descricao}",
                 emprestado.valor,
                 DateTime.now());
-            await Provider.of<DbData>(context, listen: false)
-                .deleteDinheiro(emprestado.id);
+
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Dinheiro emprestado removido com sucesso')));
             Navigator.of(context).pushNamed(
