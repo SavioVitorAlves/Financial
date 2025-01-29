@@ -1,7 +1,7 @@
 # 📌 Financial  
 
 ## 💰 Sobre o Projeto  
-O **Financial** é um aplicativo para registrar e gerenciar **dívidas, compras parceladas e gastos no cartão de crédito**. Ele permite que o usuário acompanhe seus pagamentos, receba notificações e tenha um melhor controle financeiro.  
+O **Financial** é um aplicativo para registrar e gerenciar **dívidas, compras parceladas e gastos no cartão de crédito**. Ele permite que o usuário acompanhe seus pagamentos e tenha um melhor controle financeiro.  
 
 ---
 
