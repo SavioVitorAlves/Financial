@@ -65,6 +65,7 @@ flutter pub get
 flutter run
 ```
 ## 📂 Estrutura do Projeto
+```plaintext
 financial/  
 ├── lib/  
 │   ├── main.dart                 # Arquivo principal do aplicativo  
@@ -72,10 +73,11 @@ financial/
 │   ├── models/                   # Modelos de dados  
 │   ├── services/                 # Serviços como notificações e cálculos  
 │   ├── utils/                    # Helpers e funções auxiliares  
-│   ├── components/               # Widgets reutilizáveis  
-├── assets/                       # Ícones, fontes, imagens  
+│   ├── widgets /                 # Widgets reutilizáveis
+|   ├── assets/imgs               # Imagens 
 ├── pubspec.yaml                  # Dependências do Flutter  
 └── README.md                     # Documentação do projeto
+```
 
 ## ✨ Funcionalidades
 ### ✔ Tela Principal
@@ -105,20 +107,17 @@ Widgets reutilizáveis armazenados em components/
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^5.0.0
-  intl: ^0.17.0
-  http: ^0.13.3
-  cloud_firestore: ^5.4.4
-  firebase_auth: ^5.3.1
-  firebase_core: ^3.6.0
-  firebase_messaging: ^15.1.3
-  flutter_local_notifications: ^17.2.4
-  timezone: ^0.9.4
-  permission_handler: ^11.2.0
+  path: ^1.9.0
   cupertino_icons: ^1.0.8
-  fl_chart: ^0.69.0
-  connectivity_plus: ^6.1.0
-  flutter_launcher_icons: ^0.9.2
+  sqflite: ^2.4.1
+  provider: ^6.1.2
+  intl: ^0.20.1
+  flutter_colorpicker: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.14.2
 ```
 
 ## 🚀 Deployment
